@@ -69,6 +69,14 @@ function MainPage() {
                 </div>
             </div>
 
+            {/* 인기 게시글 부분 */}
+            <div className=" mt-[50px] ml-120 mr-120">
+                <p className="font-bold">인기 게시글</p>   
+                <div className="shadow-md rounded-lg p-10  flex gap-10 justify-center">
+                    {/* todo: 게시글  표시 부분 추가하기*/}
+                </div>
+            </div>
+
         </>
     );
 }
