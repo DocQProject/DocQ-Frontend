@@ -9,6 +9,15 @@ function DepartmentIcon({ imageUrl, name }) {
     );
 }
 
+// todo: 버튼 event 추가하기
+function ButtonStyle({name}) {
+    return (
+        <button className="text-white bg-black px-4 py-2 rounded">
+            {name}
+        </button>
+    );
+}
+
 
 function MainPage() {
     return (
@@ -32,22 +41,22 @@ function MainPage() {
                                 className="w-full px-3 py-2 border border-gray-300 rounded"
                             />
                         </form>
-                        <button className="text-white bg-black px-4 py-2 rounded">
-                            검색
-                        </button>
+                        <ButtonStyle 
+                            name="검색"
+                        />
                     </div>
 
                     {/* 마이페이지 버튼 */}
                     <div>
-                        <button className="text-white bg-black px-4 py-2 rounded">
-                            마이 페이지
-                        </button>
+                        <ButtonStyle 
+                            name="마이 페이지"
+                        />
                     </div>
                 </div>
-            </header>
+            </header> 
 
             {/* 진료과 표시 부분 */}
-            <div className=" mt-[150px] ml-120 mr-120">
+            <div className="ml-120 mr-120">
                 <p className="font-bold">진료과로 병원 찾기</p>   
                 <div className="shadow-md rounded-lg p-10  flex gap-10 justify-center">
                     <DepartmentIcon
