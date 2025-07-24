@@ -1,6 +1,6 @@
 function DepartmentIcon({ imageUrl, name }) {
     return (
-        <div className="text-center">
+        <div className="text-center bg-gray-200 px-10 py-7 rounded-lg shadow">
             <img
                 src={imageUrl}
             />
@@ -56,9 +56,9 @@ function MainPage() {
             </header> 
 
             {/* 진료과 표시 부분 */}
-            <div className="ml-120 mr-120">
-                <p className="font-bold">진료과로 병원 찾기</p>   
-                <div className="shadow-md rounded-lg p-10  flex gap-10 justify-center">
+            <div className="w-full mx-60">
+                <p className="font-bold mb-10">진료과로 병원 찾기</p>   
+                <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
                     <DepartmentIcon
                         name="치과"
                         imageUrl={"https://img.icons8.com/?size=100&id=m0Jn3S6j3Tev&format=png&color=000000"}
@@ -79,8 +79,8 @@ function MainPage() {
             </div>
 
             {/* 인기 게시글 부분 */}
-            <div className=" mt-[50px] ml-120 mr-120">
-                <p className="font-bold">인기 게시글</p>   
+            <div className=" mt-[50px] w-full mx-60">
+                <p className="font-bold mb-10">인기 게시글</p>   
                 <div className="shadow-md rounded-lg p-10  flex gap-10 justify-center">
                     {/* todo: 게시글  표시 부분 추가하기*/}
                 </div>
