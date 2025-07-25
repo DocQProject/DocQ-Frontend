@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import MainPage from './MainPage'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import SignInPage from './SignInPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -11,6 +12,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path="/sign-in" element={<SignInPage />} />
         </Routes>
       </Router>
     </>
