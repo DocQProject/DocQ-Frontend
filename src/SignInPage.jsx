@@ -1,4 +1,4 @@
-function SignInFormDate({ value, inputPlaceholder }) {
+function SignInFormData({ value, inputPlaceholder }) {
     return (
         <div className="flex items-center mb-5">
             <label className="w-24 text-right mr-4">{value}</label>
@@ -7,12 +7,6 @@ function SignInFormDate({ value, inputPlaceholder }) {
                 className="pl-5 pr-5 py-2 border border-gray-300 rounded w-80"
             />
         </div>
-    );
-}
-
-function HorizonLine() {
-    return (
-        <div className="w-full text-center border-b border-gray-300 my-10"/>
     );
 }
 
@@ -25,11 +19,11 @@ function SignInPage() {
                     <h1 className="font-bold">로그인</h1>
                     <div className="mt-10 shadow-md rounded-lg p-15">
                         <form className="flex flex-col items-center">
-                            <SignInFormDate
+                            <SignInFormData
                                 value="아이디"
                                 inputPlaceholder="아이디를 입력해주세요."
                             />
-                            <SignInFormDate
+                            <SignInFormData
                                 value="비밀번호"
                                 inputPlaceholder="비밀번호를 입력해주세요."
                             />
@@ -42,7 +36,7 @@ function SignInPage() {
                         </form>
                     </div>
 
-                    <HorizonLine />
+                    <div className="w-full text-center border-b border-gray-300 my-10"/>
 
                     <button
                         className="text-white bg-black px-4 rounded "
