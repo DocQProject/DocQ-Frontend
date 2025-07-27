@@ -1,4 +1,4 @@
-function SignUpFormDate({ value, inputPlaceholder }) {
+function SignUpFormData({ value, inputPlaceholder }) {
     return (
         <div className="flex items-center mb-10">
             <label className="w-36 text-left mr-4">{value}</label>
@@ -10,7 +10,7 @@ function SignUpFormDate({ value, inputPlaceholder }) {
     );
 }
 
-function SignUpPage() {
+function UserSignUpPage() {
     return (
         <>
             {/* 회원가입 폼 */}
@@ -19,16 +19,16 @@ function SignUpPage() {
                     <h1 className="font-bold">회원가입</h1>
                     <div className="mt-10 shadow-md rounded-lg p-15 ">
                         <form className="flex flex-col items-left">
-                            <SignUpFormDate
+                            <SignUpFormData
                                 value="이름"
                                 inputPlaceholder="이름 입력해주세요."
                             />
-                            <SignUpFormDate
+                            <SignUpFormData
                                 value="이메일"
                                 inputPlaceholder="이메일을 입력해주세요."
                             />
                             <div className="flex items-center">
-                                <SignUpFormDate
+                                <SignUpFormData
                                     value="아이디"
                                     inputPlaceholder="아이디를 입력해주세요."
                                 />
@@ -39,11 +39,11 @@ function SignUpPage() {
                                     중복확인
                                 </button>
                             </div>
-                            <SignUpFormDate
+                            <SignUpFormData
                                 value="비밀번호"
                                 inputPlaceholder="비밀번호를 입력해주세요."
                             />
-                            <SignUpFormDate
+                            <SignUpFormData
                                 value="비밀번호 확인"
                                 inputPlaceholder="비밀번호를 다시 입력해주세요."
                             />
@@ -62,4 +62,4 @@ function SignUpPage() {
     );
 }
 
-export default SignUpPage;
+export default UserSignUpPage;
