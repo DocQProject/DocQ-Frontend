@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import './App.css'
-import MainPage from './MainPage'
-import SignUpPage from './SignUpPage'
-import SignInPage from './SignInPage'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import MainPage from './components/MainPage'
+import SignUpPage from './components/SignUpPage'
+import SignInPage from './components/SignInPage'
+import ClinicSearchPage from './components/ClinicSearchResultPage'
+
 
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
           <Route path="/sign-up" element={<SignUpPage />}/>
           <Route path="/sign-up/doctor" element={<SignUpPage />}/>
           <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/search" element={<ClinicSearchPage />} />
         </Routes>
       </Router>
     </>
