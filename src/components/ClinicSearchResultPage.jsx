@@ -4,7 +4,7 @@ import { Pagination } from './Pagenation';
 
 function ClinicData({ name, address, department, open, close, starPoint }) {
     return (
-        <div className="flex flex-col items-center w-screen mx-auto min-h-[calc(80vh-6rem)]">
+        <div className="flex flex-col items-center w-screen mx-auto min-h-[calc(90vh-6rem) mb-10]">
             <div className="shadow-md rounded-lg p-10 px-10 pr-100">
                 <h2 className="font-bold text-5xl">{name} <span className="text-xl">{starPoint}</span></h2>
                 <p className="mt-5 text-2xl"> {open} ~ {close}</p>
@@ -31,7 +31,7 @@ function ClinicSearchResultPage() {
             />
 
             {/* 추후 백엔드 연동 시 num, size 수정*/}
-            <footer>
+            <footer className="flex fixed bottom-5 left-0 right-0 ">
                 <Pagination
                     num="1"
                     size="1"
