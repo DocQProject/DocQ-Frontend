@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import MainPage from './MainPage'
-import UserSignUpPage from './UserSignUpPage'
+import SignUpPage from './SignUpPage'
 import SignInPage from './SignInPage'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -14,7 +14,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/sign-up" element={<UserSignUpPage />}/>
+          <Route path="/sign-up" element={<SignUpPage />}/>
+          <Route path="/sign-up/doctor" element={<SignUpPage />}/>
           <Route path="/sign-in" element={<SignInPage />} />
         </Routes>
       </Router>
