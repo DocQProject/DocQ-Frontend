@@ -1,13 +1,37 @@
-function SideBarButton({ label, isActive, onClick }) {
+function SideBarButton({ label, deleteAcount = false }) {
   return (
     <button
-      onClick={onClick}
+      onClick={() => alert()}
       className={`text-left px-4 py-2 rounded hover:bg-gray-200 transition duration-500 font-semibold ${
-        isActive ? "bg-gray-300" : ""
+        deleteAcount ? "text-red-600" : ""
       }`}
     >
       {label}
     </button>
+  );
+}
+
+function ProfileFormField({ label, type = "text" }) {
+  return (
+    <label className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+      <span className="w-20 font-bold text-gray-500 shrink-0">{label}</span>
+      <input
+        type={type}
+        className="w-full border rounded px-3 py-2 focus:ring"
+      />
+    </label>
+  );
+}
+
+function ReservationCard({ hospital, date, time, comment, status }) {
+  return (
+    <div className="border rounded-lg p-4 shadow-sm flex flex-col gap-2 bg-gray-50">
+      <div className="text-lg font-bold">{hospital}</div>
+      <div className="text-sm text-gray-600">예약일: {date}</div>
+      <div className="text-sm text-gray-600">시간: {time}</div>
+      <div className="text-sm text-gray-600">코멘트: {comment}</div>
+      <div className="text-sm font-semibold text-blue-600">현황: {status}</div>
+    </div>
   );
 }
 
@@ -31,64 +55,26 @@ function MyPage() {
       <div className="w-full max-w-screen-md flex flex-col sm:flex-row gap-8">
         {/* 사이드바 */}
         <aside className="w-full sm:w-1/3 flex flex-col space-y-4">
-          <button className="text-left px-4 py-2 rounded hover:bg-gray-200 transition duration-500 font-semibold">
-            내 병원
-          </button>
-          <button className="text-left px-4 py-2 rounded hover:bg-gray-200 transition duration-500 font-semibold">
-            내 예약
-          </button>
-          <button className="text-left px-4 py-2 rounded hover:bg-gray-200 transition duration-500 font-semibold text-red-600">
-            회원탈퇴
-          </button>
-          <SideBarButton
-            label="회원정보 수정"
-            isActive={false}
-            onClick={() => {}}
-          />
+          <SideBarButton label="내 정보" />
+          <SideBarButton label="내 병원" />
+          <SideBarButton label="내 예약" />
+          <SideBarButton label={"회원탈퇴"} deleteAcount />
         </aside>
 
         {/* 폼 영역 */}
         <div className="flex-1 shadow p-6 rounded-lg bg-white">
           <section className="flex flex-col gap-6">
-            <label className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-              <span className="w-20 font-bold text-gray-500 shrink-0">
-                이름
-              </span>
-              <input
-                type="text"
-                className="w-full border rounded px-3 py-2 focus:ring"
-              />
-            </label>
-            <label className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-              <span className="w-20 font-bold text-gray-500 shrink-0">ID</span>
-              <input
-                type="text"
-                className="w-full border rounded px-3 py-2 focus:ring"
-              />
-            </label>
-            <label className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-              <span className="w-20 font-bold text-gray-500 shrink-0">
-                비밀번호
-              </span>
-              <input
-                type="password"
-                className="w-full border rounded px-3 py-2 focus:ring"
-              />
-            </label>
-            <label className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-              <span className="w-20 font-bold text-gray-500 shrink-0">
-                이메일
-              </span>
-              <input
-                type="email"
-                className="w-full border rounded px-3 py-2 focus:ring"
-              />
-            </label>
+            <ProfileFormField label="이름" />
+            <ProfileFormField label="ID" />
+            <ProfileFormField label="비밀번호" type="password" />
+            <ProfileFormField label="이메일" type="email" />
             <div className="flex justify-end">
               <button className="font-bold bg-black text-white rounded px-4 py-2 hover:bg-gray-800 transition">
                 수정
               </button>
             </div>
+
+            
           </section>
         </div>
       </div>
