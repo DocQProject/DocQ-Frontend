@@ -4,7 +4,7 @@ function DepartmentIcon({ imageUrl, name }) {
             <img
                 src={imageUrl}
             />
-            <p>{name}</p>
+            <p className="font-bold">{name}</p>
         </div>
     );
 }
@@ -23,7 +23,7 @@ function MainPage() {
     return (
         <>
             <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow px-6 py-3">
-                <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
+                <div className="flex items-center justify-between w-screen max-w-7xl mx-auto">
                     {/* 검색 */}
                     <div className="flex items-center gap-4 flex-1 justify-center">
                         <a href="/">
@@ -38,7 +38,7 @@ function MainPage() {
                                 type="search"
                                 placeholder="검색..."
                                 aria-label="Search"
-                                className="w-full px-3 py-2 border border-gray-300 rounded"
+                                className="w-screen px-3 py-2 border border-gray-300 rounded"
                             />
                         </form>
                         <ButtonStyle 
@@ -56,7 +56,7 @@ function MainPage() {
             </header> 
 
             {/* 진료과 표시 부분 */}
-            <div className="w-full mx-60">
+            <div className="w-screen mx-auto px-20">
                 <p className="font-bold mb-10">진료과로 병원 찾기</p>   
                 <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
                     <DepartmentIcon
@@ -79,7 +79,7 @@ function MainPage() {
             </div>
 
             {/* 인기 게시글 부분 */}
-            <div className=" mt-[50px] w-full mx-60">
+            <div className=" mt-[50px] w-screen mx-auto px-20">
                 <p className="font-bold mb-10">인기 게시글</p>   
                 <div className="shadow-md rounded-lg p-10  flex gap-10 justify-center">
                     {/* todo: 게시글  표시 부분 추가하기*/}

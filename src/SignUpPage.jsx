@@ -10,7 +10,8 @@ function SignUpFormData({ value, inputPlaceholder }) {
     );
 }
 
-function UserSignUpPage() {
+// 추후 useLocation을 통해 현재 URL 경로를 확인한 후 회원가입 요청 시 사용자 권한(ROLE_USER 또는 ROLE_DOCTOR)을 동적으로 설정할 예정
+function SignUpPage() {
     return (
         <>
             {/* 회원가입 폼 */}
@@ -62,4 +63,4 @@ function UserSignUpPage() {
     );
 }
 
-export default UserSignUpPage;
+export default SignUpPage;
