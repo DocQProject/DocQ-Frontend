@@ -5,7 +5,7 @@ import { Pagination } from './Pagenation';
 function ClinicData({ name, address, department, open, close, starPoint }) {
     return (
         <div className="flex flex-col items-center w-screen mx-auto mb-15">
-            <div className="shadow-md rounded-lg p-10 px-10 w-[800px] h-[300px]">
+            <div className="shadow-md rounded-lg p-10 px-10 md:w-[800px] md:h-[300px]">
                 <h2 className="font-bold text-5xl">{name} <span className="text-xl">{starPoint}</span></h2>
                 <p className="mt-5 text-2xl"> {open} ~ {close}</p>
                 <p className="mt-5 text-2xl">{address}</p>
