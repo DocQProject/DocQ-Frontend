@@ -19,10 +19,13 @@ function ClinicData({ address, department, open, close }) {
 }
 
 //리뷰 라벨 클릭 시 보이는 정보
-function ReviewData({image, name, starPoint, content }) {
+function ReviewData({ image, name, starPoint, content }) {
     return (
         <div className="shadow-md rounded-lg p-10 px-10 md:w-[800px] md:h-[500px] mt-10">
-            <p className="text-2xl"> {name} </p>
+            <div className="grid grid-cols-2">
+                <p className="text-2xl"> {name} </p>
+                <button className="text-white bg-black rounded justify-self-end">수정</button>
+            </div>
             <p className="text-2xl mt-3"> {starPoint} </p>
             <p className="text-2xl mt-10"> {content} </p>
             <img
@@ -61,15 +64,19 @@ function ClinicPage() {
                         close="16:30"
                     /> */}
 
-                    {/* <div className="flex flex-col">
-                        <p className="font-bold text-4xl">최근 리뷰: 1000개</p>
+                    <div className="flex flex-col">
+                        <div className="grid grid-cols-2">
+                            <p className="font-bold text-4xl">최근 리뷰: 1000개</p>
+                            <button className="text-white bg-black rounded justify-self-end"> 리뷰 작성하기</button>
+                        </div>
+
                         <ReviewData
                             image="이미지"
                             name="리뷰어"
                             starPoint="⭐⭐⭐⭐⭐"
                             content="친절해요"
                         />
-                    </div> */}
+                    </div>
                 </div>
 
             </div>
