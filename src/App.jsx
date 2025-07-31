@@ -5,6 +5,7 @@ import MainPage from './components/MainPage'
 import SignUpPage from './components/SignUpPage'
 import SignInPage from './components/SignInPage'
 import ClinicSearchPage from './components/ClinicSearchResultPage'
+import ClinicPage from './components/ClinicPage'
 
 
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/sign-up/doctor" element={<SignUpPage />}/>
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/search" element={<ClinicSearchPage />} />
+          <Route path="/clinic" element={<ClinicPage />} />
         </Routes>
       </Router>
     </>
