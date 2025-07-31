@@ -6,7 +6,9 @@ import SignUpPage from './components/SignUpPage'
 import SignInPage from './components/SignInPage'
 import ClinicSearchPage from './components/ClinicSearchResultPage'
 import ReviewPage from './components/ReviewPage'
+import ClinicPage from './components/ClinicPage'
 
+import MyPage from './MyPage'
 
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/search" element={<ClinicSearchPage />} />
           <Route path="/review" element={<ReviewPage />} />
+          <Route path='/mypage' element={<MyPage />} />
+          <Route path="/clinic" element={<ClinicPage />} />
         </Routes>
       </Router>
     </>
