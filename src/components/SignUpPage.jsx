@@ -1,4 +1,12 @@
-function SignUpFormData({ value, inputPlaceholder }) {
+function SignUpFormData({ value, inputPlaceholder, check = false }) {
+    const button = check ?
+        <button
+            type="button"
+            className="text-white bg-black rounded ml-3 px-3 py-2"
+        >
+            중복확인
+        </button> : null;
+
     return (
         <div className="flex items-center mb-10">
             <label className="w-36 text-left mr-4">{value}</label>
@@ -6,6 +14,7 @@ function SignUpFormData({ value, inputPlaceholder }) {
                 placeholder={inputPlaceholder}
                 className="pl-5 pr-5 py-2 border border-gray-300 rounded w-80"
             />
+            {button}
         </div>
     );
 }
@@ -15,9 +24,9 @@ function SignUpPage() {
     return (
         <>
             {/* 회원가입 폼 */}
-            <div className="flex justify-center h-screen w-screen mx-auto mt-20">
+            <div className="flex justify-center h-screen w-screen mx-auto my-auto py-30">
                 <div className="flex flex-col items-center">
-                    <h1 className="font-bold">회원가입</h1>
+                    <h1 className="font-bold text-5xl">회원가입</h1>
                     <div className="mt-10 shadow-md rounded-lg p-15 ">
                         <form className="flex flex-col items-left">
                             <SignUpFormData
@@ -32,13 +41,8 @@ function SignUpPage() {
                                 <SignUpFormData
                                     value="아이디"
                                     inputPlaceholder="아이디를 입력해주세요."
+                                    check="true"
                                 />
-                                <button
-                                    type="button"
-                                    className="text-white bg-black rounded ml-3 mb-10"
-                                >
-                                    중복확인
-                                </button>
                             </div>
                             <SignUpFormData
                                 value="비밀번호"
