@@ -20,8 +20,8 @@ function ButtonStyle({ name }) {
 
 export function MainHeader() {
     return (
-        <header className="fixed top-0 left-0 right-0 bg-white shadow px-6 py-3">
-            <div className="flex items-center justify-between w-screen max-w-7xl mx-auto">
+        <header className="fixed top-0 left-0 right-0 bg-white shadow px-6 py-5">
+            <div className="flex w-screen mx-auto px-10">
                 {/* 검색 */}
                 <div className="flex items-center gap-4 flex-1 justify-center">
                     <a href="/">
@@ -63,7 +63,7 @@ function MainPage() {
 
             <main>
                 {/* 진료과 표시 부분 */}
-                <div className="w-screen mx-auto px-20">
+                <div className="w-screen mx-auto px-20 flex-1 overflow-y-auto pt-[8rem] pb-[5rem]">
                     <p className="font-bold mb-10">진료과로 병원 찾기</p>
                     <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
                         <DepartmentIcon
@@ -86,9 +86,9 @@ function MainPage() {
                 </div>
 
                 {/* 인기 게시글 부분 */}
-                <div className=" mt-[50px] w-screen mx-auto px-20">
+                <div className=" w-screen mx-auto px-20">
                     <p className="font-bold mb-10">인기 게시글</p>
-                    <div className="shadow-md rounded-lg p-10  flex gap-10 justify-center">
+                    <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
                         {/* todo: 게시글  표시 부분 추가하기*/}
                     </div>
                 </div>

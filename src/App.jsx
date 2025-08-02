@@ -7,8 +7,7 @@ import SignInPage from './components/SignInPage'
 import ClinicSearchPage from './components/ClinicSearchResultPage'
 import ReviewPage from './components/ReviewPage'
 import ClinicPage from './components/ClinicPage'
-
-import MyPage from './MyPage'
+import MyPage from './components/MyPage'
 
 
 function App() {

@@ -24,7 +24,7 @@ function ReviewData({ image, name, starPoint, content }) {
         <div className="shadow-md rounded-lg p-10 px-10 md:w-[800px] md:h-[500px] mt-10">
             <div className="grid grid-cols-2">
                 <p className="text-2xl"> {name} </p>
-                <button className="text-white bg-black rounded justify-self-end">수정</button>
+                <button className="text-white bg-black rounded justify-self-end px-5 py-2">수정</button>
             </div>
             <p className="text-2xl mt-3"> {starPoint} </p>
             <p className="text-2xl mt-10"> {content} </p>
@@ -42,9 +42,9 @@ function ClinicPage() {
             <div className="flex flex-col w-screen h-screen my-auto mx-auto px-50 py-20">
                 <div className="grid grid-cols-2 ">
                     <div>
-                        <h1>서울 병원</h1>
+                        <h1 className="font-bold text-5xl">서울 병원</h1>
                     </div>
-                    <button className="text-white bg-black mx-30 rounded">예약하기</button>
+                    <button className="text-white bg-black rounded justify-self-end px-20">예약하기</button>
                 </div>
 
                 {/* 구분선 */}
@@ -67,7 +67,7 @@ function ClinicPage() {
                     <div className="flex flex-col">
                         <div className="grid grid-cols-2">
                             <p className="font-bold text-4xl">최근 리뷰: 1000개</p>
-                            <button className="text-white bg-black rounded justify-self-end"> 리뷰 작성하기</button>
+                            <button className="text-white bg-black rounded justify-self-end px-10"> 리뷰 작성하기</button>
                         </div>
 
                         <ReviewData
