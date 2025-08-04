@@ -2,9 +2,8 @@ function SideBarButton({ label, deleteAcount = false }) {
   return (
     <button
       onClick={() => alert()}
-      className={`text-left px-4 py-2 rounded hover:bg-gray-200 transition duration-500 font-semibold ${
-        deleteAcount ? "text-red-600" : ""
-      }`}
+      className={`text-left px-4 py-2 rounded hover:bg-gray-200 transition duration-500 font-semibold ${deleteAcount ? "text-red-600" : ""
+        }`}
     >
       {label}
     </button>
@@ -102,6 +101,7 @@ function MyPage() {
                 수정
               </button>
             </div>
+
 
           </section>
         </div>
