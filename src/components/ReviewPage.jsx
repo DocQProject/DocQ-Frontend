@@ -1,4 +1,4 @@
-import { FaRegStar } from 'react-icons/fa';
+// import { FaRegStar } from 'react-icons/fa';
 
 // 추후 동적으로 수정할 예정입니다. 
 function StarRating() {

@@ -10,7 +10,6 @@ import MyPage from './components/MyPage'
 import Board from './components/Board'
 import ReviewPage from './components/ReviewPage'
 import ClinicPage from './components/ClinicPage'
-import MyPage from './components/MyPage'
 
 
 function App() {
