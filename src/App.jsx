@@ -6,11 +6,10 @@ import SignUpPage from './components/SignUpPage'
 import SignInPage from './components/SignInPage'
 import ClinicSearchPage from './components/ClinicSearchResultPage'
 
-import MyPage from './components/MyPage'
-import Board from './components/Board'
 import ReviewPage from './components/ReviewPage'
 import ClinicPage from './components/ClinicPage'
-// import ReservationPage from './components/ReservationPage'
+import MyPage from './components/MyPage'
+import Board from './components/Board'
 
 
 function App() {
@@ -29,7 +28,6 @@ function App() {
           <Route path='/mypage' element={<MyPage />} />
           <Route path='/board' element={<Board />} />
           <Route path="/clinic" element={<ClinicPage />} />
-          {/* <Route path="/reservation" element={<ReservationPage />} /> */}
         </Routes>
       </Router>
     </>

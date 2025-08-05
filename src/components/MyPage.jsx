@@ -100,7 +100,6 @@ function MyPage() {
               </button>
             </div>
 
-
           </section>
           
         </div> */}
