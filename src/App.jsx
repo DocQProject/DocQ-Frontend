@@ -10,6 +10,7 @@ import MyPage from './components/MyPage'
 import Board from './components/Board'
 import ReviewPage from './components/ReviewPage'
 import ClinicPage from './components/ClinicPage'
+// import ReservationPage from './components/ReservationPage'
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path='/mypage' element={<MyPage />} />
           <Route path='/board' element={<Board />} />
           <Route path="/clinic" element={<ClinicPage />} />
+          {/* <Route path="/reservation" element={<ReservationPage />} /> */}
         </Routes>
       </Router>
     </>

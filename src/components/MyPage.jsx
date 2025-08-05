@@ -36,7 +36,7 @@ function ReservationCard({ hospital, date, time, comment, status }) {
 
 function ClinicCreateForm() {
   return (
-    <form className="flex flex-col gap-4">
+    <form className="flex flex-col gap-4 w-full">
       <ClinicCreateFormLabel label="병원 이름" />
       <ClinicCreateFormLabel label="병원 주소" />
       <ClinicCreateFormLabel label="진료과" />
@@ -47,8 +47,6 @@ function ClinicCreateForm() {
           등록
         </button>
       </div>
-
-      <ClinicCreateFormLabel />
     </form>
   );
 }
@@ -90,7 +88,7 @@ function MyPage() {
         </aside>
 
         {/* 폼 영역 */}
-        <div className="flex-1 shadow p-6 rounded-lg bg-white">
+        {/* <div className="flex-1 shadow p-6 rounded-lg bg-white">
           <section className="flex flex-col gap-6">
             <ProfileFormField label="이름" />
             <ProfileFormField label="ID" />
@@ -104,7 +102,10 @@ function MyPage() {
 
 
           </section>
-        </div>
+          
+        </div> */}
+
+        <ClinicCreateForm />
       </div>
     </div>
   );
