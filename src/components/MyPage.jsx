@@ -34,6 +34,35 @@ function ReservationCard({ hospital, date, time, comment, status }) {
   );
 }
 
+function ClinicCreateForm() {
+  return (
+    <form className="flex flex-col gap-4">
+      <ClinicCreateFormLabel label="병원 이름" />
+      <ClinicCreateFormLabel label="병원 주소" />
+      <ClinicCreateFormLabel label="진료과" />
+      <ClinicCreateFormLabel label="영업 시작 시간" />
+      <ClinicCreateFormLabel label="영업 종료 시간" />
+      <div className="flex justify-end">
+        <button className="font-bold bg-black text-white rounded px-4 py-2 hover:bg-gray-800 transition">
+          등록
+        </button>
+      </div>
+
+      <ClinicCreateFormLabel />
+    </form>
+  );
+}
+
+function ClinicCreateFormLabel({ label }) {
+  return (
+    <label className="flex flex-col">
+      <span className="font-bold text-gray-500">{label}</span>
+      <input type="text" className="border rounded px-3 py-2 focus:ring" />
+    </label>
+  );
+}
+
+
 function MyPage() {
   return (
     <div className="min-h-screen pt-20 flex flex-col items-center px-4">
@@ -72,7 +101,6 @@ function MyPage() {
                 수정
               </button>
             </div>
-
 
           </section>
         </div>
