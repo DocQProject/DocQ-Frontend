@@ -1,10 +1,25 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 function NavbarMenu({ url, menuName, isSubMenu = false }) {
+    const [isActiveSection, setIsActiveSection] = useState(false);
+
     return (
-        <Link to={url}>
-            <span className="font-bold text-2xl px-10 py-10">{menuName}</span>
-        </Link>
+        <li
+
+        >
+            <Link
+                to={url}
+                onMouseEnter={() => setIsActiveSection(true)}
+                onMouseLeave={() => setIsActiveSection(false)}
+            >
+                <span
+                    className={`font-bold text-2xl px-10 py-3 border-b-4 transition-colors ${isActiveSection ? "text-blue-600 border-blue-600 " : "border-transparent"}`}
+                >
+                    {menuName}
+                </span>
+            </Link>
+        </li>
     );
 }
 
@@ -24,32 +39,26 @@ function NavigationBar() {
 
                 <div className="flex flex-1 flex-row">
                     <ul className="flex flex-row">
-                        <li>
-                            <NavbarMenu
-                                url="/"
-                                menuName="메인"
-                            />
-                        </li>
-                        <li>
-                            <NavbarMenu
-                                url="/board"
-                                menuName="게시판"
-                            />
-                        </li>
-                        <li>
-                            <NavbarMenu
-                                url="/mypage"
-                                menuName="마이 페이지"
-                                isSubMenu="true"
-                            />
-                        </li>
-                        <li>
-                            <NavbarMenu
-                                url="/"
-                                menuName="병원"
-                                isSubMenu="true"
-                            />
-                        </li>
+                        <NavbarMenu
+                            url="/"
+                            menuName="메인"
+                        />
+                        <NavbarMenu
+                            url="/board"
+                            menuName="게시판"
+                        />
+
+                        <NavbarMenu
+                            url="/mypage"
+                            menuName="마이 페이지"
+                            isSubMenu={true}
+                        />
+
+                        <NavbarMenu
+                            url="/"
+                            menuName="병원"
+                            isSubMenu={true}
+                        />
                     </ul>
                 </div>
 
