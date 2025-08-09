@@ -11,53 +11,6 @@ function DepartmentIcon({ imageUrl, name }) {
     );
 }
 
-// todo: 버튼 event 추가하기
-function ButtonStyle({ name }) {
-    return (
-        <button className="text-white bg-black px-4 py-2 rounded">
-            {name}
-        </button>
-    );
-}
-
-export function MainHeader() {
-    return (
-        <header className="fixed top-0 left-0 right-0 bg-white shadow px-6 py-5">
-            <div className="flex w-screen mx-auto px-10">
-                {/* 검색 */}
-                <div className="flex items-center gap-4 flex-1 justify-center">
-                    <a href="/">
-                        <img
-                            className="w-8 h-8"
-                            src="https://img.icons8.com/?size=100&id=81644&format=png&color=000000"
-                            alt="logo"
-                        />
-                    </a>
-                    <form role="search" className="flex flex-1 max-w-md">
-                        <input
-                            type="search"
-                            placeholder="검색..."
-                            aria-label="Search"
-                            className="w-screen px-3 py-2 border border-gray-300 rounded"
-                        />
-                    </form>
-                    <ButtonStyle
-                        name="검색"
-                    />
-                </div>
-
-                {/* 마이페이지 버튼 */}
-                <div>
-                    <ButtonStyle
-                        name="마이 페이지"
-                    />
-                </div>
-            </div>
-        </header>
-    );
-}
-
-
 function MainPage() {
     return (
         <>
@@ -67,7 +20,7 @@ function MainPage() {
                 {/* 진료과 표시 부분 */}
                 <div className="w-screen mx-auto px-100 flex-1 pt-[10rem] pb-[5rem]">
                     <p className="font-bold text-xl mb-10">진료과로 병원 찾기</p>
-                    <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
+                    <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center w-full overflow-x-auto scrollbar-hide">
                         <DepartmentIcon
                             name="치과"
                             imageUrl={"https://img.icons8.com/?size=100&id=m0Jn3S6j3Tev&format=png&color=000000"}
