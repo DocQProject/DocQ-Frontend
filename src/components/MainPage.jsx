@@ -65,8 +65,8 @@ function MainPage() {
 
             <main>
                 {/* 진료과 표시 부분 */}
-                <div className="w-screen mx-auto px-20 flex-1 overflow-y-auto pt-[8rem] pb-[5rem]">
-                    <p className="font-bold mb-10">진료과로 병원 찾기</p>
+                <div className="w-screen mx-auto px-100 flex-1 pt-[10rem] pb-[5rem]">
+                    <p className="font-bold text-xl mb-10">진료과로 병원 찾기</p>
                     <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
                         <DepartmentIcon
                             name="치과"
@@ -88,8 +88,8 @@ function MainPage() {
                 </div>
 
                 {/* 인기 게시글 부분 */}
-                <div className=" w-screen mx-auto px-20">
-                    <p className="font-bold mb-10">인기 게시글</p>
+                <div className=" w-screen mx-auto px-100">
+                    <p className="font-bold text-xl mb-10">인기 게시글</p>
                     <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
                         {/* todo: 게시글  표시 부분 추가하기*/}
                     </div>

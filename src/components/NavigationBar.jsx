@@ -1,32 +1,44 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function NavbarMenu({ url, menuName, isSubMenu = false }) {
+function NavbarMenu({ url, menuName, subMenu = [] }) {
     const [isActiveSection, setIsActiveSection] = useState(false);
+    const isSubMenuActive = isActiveSection && subMenu.length !== 0;
 
     return (
         <li
-
+            className={`flex items-center h-full ${ isSubMenuActive ? "relative" : ""}`}
+            onMouseEnter={() => setIsActiveSection(true)}
+            onMouseLeave={() => setIsActiveSection(false)}
         >
-            <Link
-                to={url}
-                onMouseEnter={() => setIsActiveSection(true)}
-                onMouseLeave={() => setIsActiveSection(false)}
-            >
+            <Link to={url} className="">
                 <span
                     className={`font-bold text-2xl px-10 py-3 border-b-4 transition-colors ${isActiveSection ? "text-blue-600 border-blue-600 " : "border-transparent"}`}
                 >
                     {menuName}
                 </span>
             </Link>
+
+            {isSubMenuActive && (
+                <ul className="absolute top-full left-0 flex flex-col justify-center items-center bg-white shadow w-full">
+                    {subMenu.map((item, index) => (
+                        <li
+                            key={index}
+                            className="font-bold my-5 mx-3  "
+
+                        >{item}</li>
+                    ))}
+                </ul>
+            )}
+
         </li>
     );
 }
 
 function NavigationBar() {
     return (
-        <header className="fixed top-0 left-0 right-0 bg-white shadow px-25 py-5">
-            <nav className="flex flex-row justify-between items-center w-full">
+        <header className="fixed top-0 left-0 right-0 bg-white shadow px-25 py-5 h-30">
+            <nav className="flex flex-row justify-between items-center w-full h-full">
                 {/* 로고 */}
                 <Link to='/'>
                     <img
@@ -37,8 +49,8 @@ function NavigationBar() {
                     />
                 </Link>
 
-                <div className="flex flex-1 flex-row">
-                    <ul className="flex flex-row">
+                <div className="flex flex-1 flex-row h-full">
+                    <ul className="flex flex-row h-full">
                         <NavbarMenu
                             url="/"
                             menuName="메인"
@@ -51,13 +63,13 @@ function NavigationBar() {
                         <NavbarMenu
                             url="/mypage"
                             menuName="마이 페이지"
-                            isSubMenu={true}
+                            subMenu={["내 정보", "내 예약", "내 병원"]} //추후 url도 추가하기
                         />
 
                         <NavbarMenu
                             url="/"
                             menuName="병원"
-                            isSubMenu={true}
+                            subMenu={["치과", "안과", "이비인후과", "피부과"]} //추후 url도 추가하기
                         />
                     </ul>
                 </div>

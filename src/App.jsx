@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import MainPage from './components/MainPage'
@@ -10,14 +9,17 @@ import ReviewPage from './components/ReviewPage'
 import ClinicPage from './components/ClinicPage'
 import MyPage from './components/MyPage'
 import Board from './components/Board'
+import NavigationBar from './components/NavigationBar'
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  const navigationBarHiddenUrl = ["/sign-up", "/sign-in"]
+  const isNavigation = !navigationBarHiddenUrl.includes(location.pathname);
 
   return (
     <>
       <Router>
+        {isNavigation && <NavigationBar />}
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/sign-up" element={<SignUpPage />}/>
