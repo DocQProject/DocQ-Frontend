@@ -1,5 +1,3 @@
-import NavigationBar from "./NavigationBar";
-
 function DepartmentIcon({ imageUrl, name }) {
     return (
         <div className="text-center bg-gray-200 px-10 py-7 rounded-lg shadow">
@@ -14,8 +12,6 @@ function DepartmentIcon({ imageUrl, name }) {
 function MainPage() {
     return (
         <>
-            <NavigationBar />
-
             <main>
                 {/* 진료과 표시 부분 */}
                 <div className="w-screen mx-auto px-100 flex-1 pt-[10rem] pb-[5rem]">
