@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 
 function getDepartments() {
     const [departments, setDepartments] = useState([]);
-    const token = "eyJhbGciOiJIUzUxMiJ9.eyJpZCI6NSwibG9naW5JZCI6IuyVhOydtOuUlCIsIm5hbWUiOiLshJzsp4Dsm5AiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImV4cCI6MTc1NDkzMzIxMSwiaWF0IjoxNzU0ODkwMDExfQ.A9C7_-WFhkMiWhoXSldtCnzTZr2Hd53rypE_2gpXroW0EGhau-QWIMCd7jqJaeAphp-GOPqnkl-lIyjoIhQGfg"
+    const token = "eyJhbGciOiJIUzUxMiJ9.eyJpZCI6NSwibG9naW5JZCI6IuyVhOydtOuUlCIsIm5hbWUiOiLshJzsp4Dsm5AiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImV4cCI6MTc1NTAyNDEzOSwiaWF0IjoxNzU0OTgwOTM5fQ.So70bfnAhTffjVLaFNHXXu2WNSOyNwK0FuqvI3WK6Vvd_lYvrPhvlU2kh9ZauYl9502nzxoezchhUdLibI6azQ"
 
     useEffect(() => {
         axios.get(
@@ -34,6 +34,12 @@ function DepartmentIcon({ imageUrl, name }) {
 }
 
 function MainPage() {
+    const departmentsIcon = [
+        "https://img.icons8.com/?size=100&id=m0Jn3S6j3Tev&format=png&color=000000",
+        "https://img.icons8.com/?size=100&id=SfoGooXDPPeC&format=png&color=000000",
+        "https://img.icons8.com/?size=100&id=23292&format=png&color=000000",
+        "https://img.icons8.com/?size=100&id=79381&format=png&color=000000",
+    ]
     return (
         <>
             <main>
@@ -45,7 +51,7 @@ function MainPage() {
                             <DepartmentIcon
                                 key={index}
                                 name={department.name}
-                                imageUrl={department.icon}
+                                imageUrl={departmentsIcon[index]}
                             />
                         )}
                     </div>
