@@ -2,18 +2,19 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 function NavbarMenu({ url, menuName, subMenu = [] }) {
-    const [isActiveSection, setIsActiveSection] = useState(false);
-    const isSubMenuActive = isActiveSection && subMenu.length !== 0;
+    const [isActiveMainSection, setIsActiveMainSection] = useState(false);
+    const [isActiveSubSection, setIsActiveSubSection] = useState("");
+    const isSubMenuActive = isActiveMainSection && subMenu.length !== 0;
 
     return (
         <li
-            className={`flex items-center h-full ${ isSubMenuActive ? "relative" : ""}`}
-            onMouseEnter={() => setIsActiveSection(true)}
-            onMouseLeave={() => setIsActiveSection(false)}
+            className={`flex items-center h-full ${isSubMenuActive ? "relative" : ""}`}
+            onMouseEnter={() => setIsActiveMainSection(true)}
+            onMouseLeave={() => setIsActiveMainSection(false)}
         >
             <Link to={url} className="">
                 <span
-                    className={`font-bold text-2xl px-10 py-3 border-b-4 transition-colors ${isActiveSection ? "text-blue-600 border-blue-600 " : "border-transparent"}`}
+                    className={`font-bold text-2xl px-10 py-3 border-b-4 transition-colors ${isActiveMainSection ? "text-blue-600 border-blue-600 " : "border-transparent"}`}
                 >
                     {menuName}
                 </span>
@@ -24,9 +25,14 @@ function NavbarMenu({ url, menuName, subMenu = [] }) {
                     {subMenu.map((item, index) => (
                         <li
                             key={index}
-                            className="font-bold my-5 mx-3  "
-
-                        >{item}</li>
+                            className="font-bold my-5 cursor-pointer"
+                            onMouseEnter={() => setIsActiveSubSection(index)}
+                            onMouseLeave={() => setIsActiveSubSection("")}
+                        >   
+                            <span className={`py-3 border-b-2 transition-colors ${isActiveSubSection === index? "text-blue-600 border-blue-600 " : "border-transparent"}`}>
+                                {item}    
+                            </span>
+                        </li>
                     ))}
                 </ul>
             )}
@@ -38,7 +44,7 @@ function NavbarMenu({ url, menuName, subMenu = [] }) {
 function NavigationBar() {
     return (
         <header className="fixed top-0 left-0 right-0 bg-white shadow px-25 py-5 h-30">
-            <nav className="flex flex-row justify-between items-center w-full h-full">
+            <nav className="grid grid-cols-[1fr_2fr_1fr] items-center w-full h-full">
                 {/* 로고 */}
                 <Link to='/'>
                     <img

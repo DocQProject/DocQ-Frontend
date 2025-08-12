@@ -29,7 +29,6 @@ function App() {
           <Route path="/review" element={<ReviewPage />} />
           <Route path='/mypage' element={<MyPage />} />
           <Route path='/board' element={<Board />} />
-
           <Route path="/clinic" element={<ClinicPage />} />
         </Routes>
       </Router>

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { MainHeader } from './MainPage'
 import { Pagination } from './Pagenation';
 
 function ClinicData({ name, address, department, open, close, starPoint }) {
@@ -18,8 +17,6 @@ function ClinicSearchResultPage() {
     const [currentPage, setCurrentPage] = useState(1);
     return (
         <>
-            <MainHeader />
-
             <main className="flex-1 overflow-y-auto pt-[8rem] pb-[5rem]">
                 {/* 예시 */}
                 <ClinicData
