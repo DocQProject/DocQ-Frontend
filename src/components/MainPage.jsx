@@ -1,3 +1,27 @@
+import axios from "axios";
+import { useState, useEffect } from "react"
+
+function getDepartments() {
+    const [departments, setDepartments] = useState([]);
+    const token = "eyJhbGciOiJIUzUxMiJ9.eyJpZCI6NSwibG9naW5JZCI6IuyVhOydtOuUlCIsIm5hbWUiOiLshJzsp4Dsm5AiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImV4cCI6MTc1NTAyNDEzOSwiaWF0IjoxNzU0OTgwOTM5fQ.So70bfnAhTffjVLaFNHXXu2WNSOyNwK0FuqvI3WK6Vvd_lYvrPhvlU2kh9ZauYl9502nzxoezchhUdLibI6azQ"
+
+    useEffect(() => {
+        axios.get(
+            "http://localhost:8080/api/clinics/departments", {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
+        }
+        )
+            .then((res) => 
+                setDepartments(res.data.departments)
+        )
+            .catch(err => console.log(err));
+    }, []);
+
+    return departments;
+}
+
 function DepartmentIcon({ imageUrl, name }) {
     return (
         <div className="text-center bg-gray-200 px-10 py-7 rounded-lg shadow">
@@ -10,6 +34,12 @@ function DepartmentIcon({ imageUrl, name }) {
 }
 
 function MainPage() {
+    const departmentsIcon = [
+        "https://img.icons8.com/?size=100&id=m0Jn3S6j3Tev&format=png&color=000000",
+        "https://img.icons8.com/?size=100&id=SfoGooXDPPeC&format=png&color=000000",
+        "https://img.icons8.com/?size=100&id=23292&format=png&color=000000",
+        "https://img.icons8.com/?size=100&id=79381&format=png&color=000000",
+    ]
     return (
         <>
             <main>
@@ -17,22 +47,13 @@ function MainPage() {
                 <div className="w-screen mx-auto px-100 flex-1 pt-[10rem] pb-[5rem]">
                     <p className="font-bold text-xl mb-10">진료과로 병원 찾기</p>
                     <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center w-full overflow-x-auto scrollbar-hide">
-                        <DepartmentIcon
-                            name="치과"
-                            imageUrl={"https://img.icons8.com/?size=100&id=m0Jn3S6j3Tev&format=png&color=000000"}
-                        />
-                        <DepartmentIcon
-                            name="안과"
-                            imageUrl={"https://img.icons8.com/?size=100&id=SfoGooXDPPeC&format=png&color=000000"}
-                        />
-                        <DepartmentIcon
-                            name="이비인후과"
-                            imageUrl={"https://img.icons8.com/?size=100&id=23292&format=png&color=000000"}
-                        />
-                        <DepartmentIcon
-                            name="피부과"
-                            imageUrl={"https://img.icons8.com/?size=100&id=79381&format=png&color=000000"}
-                        />
+                        {getDepartments().map((department, index) =>
+                            <DepartmentIcon
+                                key={index}
+                                name={department.name}
+                                imageUrl={departmentsIcon[index]}
+                            />
+                        )}
                     </div>
                 </div>
 
