@@ -1,16 +1,27 @@
 import { useState } from "react";
+import { fetchSignIn } from "../api";
 
-function SignInFormData({ type = "", value, inputPlaceholder }) {
-    const [isChecked, setIsChecked] = useState(false);
+function handleSubmit(e, signInInfo) {
+    e.preventDefault();
+
+    fetchSignIn(signInInfo)
+}
+
+function SignInFormData({ name, type = "", value, inputPlaceholder, isChecked, setIsChecked, setSignInInfo }) {
     const isPassword = type === "password";
 
     return (
         <div className="flex items-center mb-5">
             <label className="w-24 text-left mr-4">{value}</label>
             <input
-                type={isPassword && isChecked ? "text": type}
+                name={name}
+                type={isPassword && isChecked ? "text" : type}
                 placeholder={inputPlaceholder}
                 className="pl-5 pr-5 py-2 border border-gray-300 rounded w-80"
+                onChange={e => setSignInInfo(info => ({
+                    ...info,
+                    [e.target.name]: e.target.value,
+                }))}
             />
             {
                 isPassword ?
@@ -29,6 +40,9 @@ function SignInFormData({ type = "", value, inputPlaceholder }) {
 }
 
 function SignInPage() {
+    const [isChecked, setIsChecked] = useState(false);
+    const [signInInfo, setSignInInfo] = useState({ loginId: "", password: "" });
+
     return (
         <>
             {/* 로그인 폼 */}
@@ -36,15 +50,24 @@ function SignInPage() {
                 <div className="flex flex-col items-center">
                     <h1 className="font-bold text-5xl">로그인</h1>
                     <div className="mt-10 shadow-md rounded-lg p-15">
-                        <form className="flex flex-col items-left">
+                        <form
+                            className="flex flex-col items-left"
+                            onSubmit={e => handleSubmit(e, signInInfo)}
+                        >
                             <SignInFormData
+                                name="loginId"
                                 value="아이디"
                                 inputPlaceholder="아이디를 입력해주세요."
+                                setSignInInfo={setSignInInfo}
                             />
                             <SignInFormData
+                                name="password"
                                 type="password"
                                 value="비밀번호"
                                 inputPlaceholder="비밀번호를 입력해주세요."
+                                isChecked={isChecked}
+                                setIsChecked={setIsChecked}
+                                setSignInInfo={setSignInInfo}
                             />
                             <button
                                 type="submit"

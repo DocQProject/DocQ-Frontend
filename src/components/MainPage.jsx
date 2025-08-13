@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { fetchDepartments } from "../fetch/clinic";
+import { fetchDepartments } from "../api";
 
 function DepartmentIcon({ imageUrl, name }) {
     return (
@@ -23,11 +23,7 @@ function MainPage() {
     const [departments, setDepartments] = useState([]);
 
     useEffect(() => {
-        fetchDepartments()
-            .then((res) =>
-                setDepartments(res.data.departments)
-            )
-            .catch(err => console.log(err));
+        fetchDepartments(setDepartments)
     }, []);
 
     return (
