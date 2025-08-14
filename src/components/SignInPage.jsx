@@ -1,47 +1,78 @@
 import { useState } from "react";
 import { fetchSignIn } from "../api";
 
-function handleSubmit(e, signInInfo) {
+function handleSubmit(e, signInInfo, setErrorMessage) {
     e.preventDefault();
 
-    fetchSignIn(signInInfo)
+    setErrorMessage({ loginIdError: "", passwordError: "" });
+    fetchSignIn(signInInfo, setErrorMessage)
 }
 
-function SignInFormData({ name, type = "", value, inputPlaceholder, isChecked, setIsChecked, setSignInInfo }) {
+function IsInputValue({ value }) {
+    return (
+        <p
+            className="font-bold text-top text-xs text-red-400 ml-28 mb-10"
+        > {value}</p>
+    );
+}
+
+function IsGlobalError({ value }) {
+    return (
+        <p
+            className="flex font-bold text-xs text-red-400 justify-center mt-10"
+        > {value}</p>
+    );
+}
+
+function SignInFormData({ name, value, type = "", inputPlaceholder, isChecked, setIsChecked, setSignInInfo, errorMessage }) {
     const isPassword = type === "password";
+    const isError = errorMessage !== "";
 
     return (
-        <div className="flex items-center mb-5">
-            <label className="w-24 text-left mr-4">{value}</label>
-            <input
-                name={name}
-                type={isPassword && isChecked ? "text" : type}
-                placeholder={inputPlaceholder}
-                className="pl-5 pr-5 py-2 border border-gray-300 rounded w-80"
-                onChange={e => setSignInInfo(info => ({
-                    ...info,
-                    [e.target.name]: e.target.value,
-                }))}
-            />
+        <div className="flex flex-col">
+            <div className="flex items-center mb-5">
+                <label className="w-24 text-left mr-4">{value}</label>
+                <input
+                    name={name}
+                    type={isPassword && isChecked ? "text" : type}
+                    placeholder={inputPlaceholder}
+                    className="pl-5 pr-5 py-2 border border-gray-300 rounded w-80 flex flex-col"
+                    onChange={e => setSignInInfo(info => ({
+                        ...info,
+                        [e.target.name]: e.target.value,
+                    }))}
+                />
+                {/* 체크 박스 표시 부분 */}
+                {
+                    isPassword ?
+                        <label className="flex items-center mx-5">
+                            <input
+                                type="checkbox"
+                                className="mx-2"
+                                checked={isChecked}
+                                onChange={(e) => setIsChecked(e.target.checked)}
+                            />
+                            비밀번호 보기
+                        </label> : null
+                }
+            </div>
+            {/* 경고 문자 표시 부분 */}
             {
-                isPassword ?
-                    <label className="flex items-center mx-5">
-                        <input
-                            type="checkbox"
-                            className="mx-2"
-                            checked={isChecked}
-                            onChange={(e) => setIsChecked(e.target.checked)}
-                        />
-                        비밀번호 보기
-                    </label> : null
+                isError ?
+                    <IsInputValue
+                        value={errorMessage}
+                    /> : null
             }
         </div>
+
+
     );
 }
 
 function SignInPage() {
     const [isChecked, setIsChecked] = useState(false);
     const [signInInfo, setSignInInfo] = useState({ loginId: "", password: "" });
+    const [errorMessage, setErrorMessage] = useState({ loginIdError: "", passwordError: "", globalError: "" });
 
     return (
         <>
@@ -52,13 +83,14 @@ function SignInPage() {
                     <div className="mt-10 shadow-md rounded-lg p-15">
                         <form
                             className="flex flex-col items-left"
-                            onSubmit={e => handleSubmit(e, signInInfo)}
+                            onSubmit={e => handleSubmit(e, signInInfo, setErrorMessage)}
                         >
                             <SignInFormData
                                 name="loginId"
                                 value="아이디"
                                 inputPlaceholder="아이디를 입력해주세요."
                                 setSignInInfo={setSignInInfo}
+                                errorMessage={errorMessage.loginIdError}
                             />
                             <SignInFormData
                                 name="password"
@@ -68,7 +100,11 @@ function SignInPage() {
                                 isChecked={isChecked}
                                 setIsChecked={setIsChecked}
                                 setSignInInfo={setSignInInfo}
+                                errorMessage={errorMessage.passwordError}
                             />
+                            {
+                                errorMessage.globalError !== "" ? <IsGlobalError value={errorMessage.globalError} /> : null
+                            }
                             <button
                                 type="submit"
                                 className="text-white bg-black px-4 py-2 rounded mt-10 mx-40"
