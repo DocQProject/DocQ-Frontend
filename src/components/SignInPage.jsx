@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchSignIn } from "../api";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function FieldErrorMessage({ value }) {
@@ -77,7 +78,6 @@ function SignInPage() {
         { name: "password", label: "비밀번호", type: "password", placeholder: "비밀번호를 입력해주세요.", error: errors.passwordError }
     ];
 
-
     //로그인 폼 제출 
     function handleSignInSubmit(e, signInInfo, setErrorMessage, navigate) {
         e.preventDefault();
@@ -115,6 +115,7 @@ function SignInPage() {
                                 showPassword={showPassword}
                                 setShowPassword={setShowPassword}
                                 setSignInInfo={setSignInInfo}
+                                errorMessage={errorMessage.passwordError}
                             />
                             {
                                 errors.globalError !== "" ? <GlobalErrorMessage value={errors.globalError} /> : null
