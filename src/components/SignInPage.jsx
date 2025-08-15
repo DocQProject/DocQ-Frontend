@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { fetchSignIn } from "../api";
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function FieldErrorMessage({ value }) {
@@ -74,16 +73,16 @@ function SignInPage() {
     const navigate = useNavigate()
 
     const fields = [
-        { name: "loginId", label: "아이디", type: "text", placeholder: "아이디를 입력해주세요.", error: errors.loginIdError },
-        { name: "password", label: "비밀번호", type: "password", placeholder: "비밀번호를 입력해주세요.", error: errors.passwordError }
+        { name: "loginId", label: "아이디", type: "text", value: signInInfo.loginId, placeholder: "아이디를 입력해주세요.", error: errors.loginIdError },
+        { name: "password", label: "비밀번호", type: "password",value: signInInfo.password, placeholder: "비밀번호를 입력해주세요.", error: errors.passwordError }
     ];
 
     //로그인 폼 제출 
-    function handleSignInSubmit(e, signInInfo, setErrorMessage, navigate) {
+    function handleSignInSubmit(e, signInInfo, setErrors, navigate) {
         e.preventDefault();
 
-        setErrorMessage({ loginIdError: "", passwordError: "" });
-        fetchSignIn(signInInfo, setErrorMessage, navigate)
+        setErrors({ loginIdError: "", passwordError: "" });
+        fetchSignIn(signInInfo, setErrors, navigate)
     }
 
     //비밀번호 초기화 (에러가 발생한 경우)
@@ -109,13 +108,14 @@ function SignInPage() {
                             <SignInField
                                 baseField={fields[0]}
                                 setSignInInfo={setSignInInfo}
+                                error={errors.loginIdError}
                             />
                             <SignInField
                                 baseField={fields[1]}
                                 showPassword={showPassword}
                                 setShowPassword={setShowPassword}
                                 setSignInInfo={setSignInInfo}
-                                errorMessage={errorMessage.passwordError}
+                                error={errors.passwordError}
                             />
                             {
                                 errors.globalError !== "" ? <GlobalErrorMessage value={errors.globalError} /> : null

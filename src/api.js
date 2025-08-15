@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function fetchSignIn(signInInfo, setErrorMessage, navigate) {
+export function fetchSignIn(signInInfo, setErrors, navigate) {
     axios.post(
         "http://localhost:8080/api/auth/sign-in",
         signInInfo,
@@ -10,7 +10,7 @@ export function fetchSignIn(signInInfo, setErrorMessage, navigate) {
     )
         .then((res) => {
             localStorage.setItem("accessToken", res.data.token.trim()),
-            setErrorMessage({ loginIdError: "", passwordError: "", globalError: "" }),
+            setErrors({ loginIdError: "", passwordError: "", globalError: "" }),
             navigate("/");
         })
         .catch(err => {
@@ -40,7 +40,7 @@ export function fetchSignIn(signInInfo, setErrorMessage, navigate) {
                 });
             }
 
-            setErrorMessage(prev => ({ ...prev, ...Errors }));
+            setErrors(prev => ({ ...prev, ...Errors }));
         })
 }
 
