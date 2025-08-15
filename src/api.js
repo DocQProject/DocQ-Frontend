@@ -12,24 +12,22 @@ export function fetchSignIn(signInInfo, setErrorMessage, navigate) {
             localStorage.setItem("accessToken", res.data.token.trim()),
             setErrorMessage({ loginIdError: "", passwordError: "", globalError: "" }),
             navigate("/");
-            console.log("Current pathname:", location.pathname)
         })
         .catch(err => {
             const errorMessages = err.response?.data;
             const Errors = {};
 
-            console.log(errorMessages);
-            console.log(typeof errorMessages);
-            console.log(err.response?.status)
-
+            //존재하지 않은 회원인 경우
             if (err.response?.status === 404) {
                 Errors.globalError = errorMessages;
             }
 
+            //잘못되 로그인 정보를 입력한 경우
             if (err.response?.status === 401) {
                 Errors.globalError = "아이디 혹은 비밀번호가 일치하지 않습니다.";
             }
 
+            //유효성 검증이 실패한 경우
             if (err.response?.status === 400) {
 
                 errorMessages.forEach(element => {
