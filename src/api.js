@@ -17,13 +17,8 @@ export function fetchSignIn(signInInfo, setErrors, navigate) {
             const errorMessages = err.response?.data;
             const Errors = {};
 
-            //존재하지 않은 회원인 경우
-            if (err.response?.status === 404) {
-                Errors.globalError = errorMessages;
-            }
-
-            //잘못되 로그인 정보를 입력한 경우
-            if (err.response?.status === 401) {
+            //잘못된 로그인 정보를 입력한 경우
+            if (err.response?.status === 404 || err.response?.status === 401) {
                 Errors.globalError = "아이디 혹은 비밀번호가 일치하지 않습니다.";
             }
 
