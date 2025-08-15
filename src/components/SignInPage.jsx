@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { fetchSignIn } from "../api";
+import { useNavigate } from "react-router-dom";
 
-function handleSubmit(e, signInInfo, setErrorMessage) {
+function handleSubmit(e, signInInfo, setErrorMessage, navigate) {
     e.preventDefault();
 
     setErrorMessage({ loginIdError: "", passwordError: "" });
-    fetchSignIn(signInInfo, setErrorMessage)
+    fetchSignIn(signInInfo, setErrorMessage, navigate)
 }
 
-function IsInputValue({ value, setSignInInfo }) {
+function IsInputValue({ value }) {
     return (
         <p
             className="font-bold text-top text-xs text-red-400 ml-28 mb-10"
@@ -76,6 +77,7 @@ function SignInPage() {
     const [isChecked, setIsChecked] = useState(false);
     const [signInInfo, setSignInInfo] = useState({ loginId: "", password: "" });
     const [errorMessage, setErrorMessage] = useState({ loginIdError: "", passwordError: "", globalError: "" });
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (errorMessage.globalError !== "") {
@@ -95,7 +97,7 @@ function SignInPage() {
                     <div className="mt-10 shadow-md rounded-lg p-15">
                         <form
                             className="flex flex-col items-left"
-                            onSubmit={e => handleSubmit(e, signInInfo, setErrorMessage)}
+                            onSubmit={e => handleSubmit(e, signInInfo, setErrorMessage, navigate)}
                         >
                             <SignInFormData
                                 name="loginId"
@@ -132,6 +134,7 @@ function SignInPage() {
 
                     <button
                         className="text-white bg-black px-4 py-4 rounded"
+                        onClick={() => navigate("/sign-up")}
                     >
                         회원가입 하러가기
                     </button>

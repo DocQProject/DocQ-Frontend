@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function fetchSignIn(signInInfo, setErrorMessage) {
+export function fetchSignIn(signInInfo, setErrorMessage, navigate) {
     axios.post(
         "http://localhost:8080/api/auth/sign-in",
         signInInfo,
@@ -10,8 +10,9 @@ export function fetchSignIn(signInInfo, setErrorMessage) {
     )
         .then((res) => {
             localStorage.setItem("accessToken", res.data.token.trim()),
-                setErrorMessage({ loginIdError: "", passwordError: "", globalError: "" })
-
+            setErrorMessage({ loginIdError: "", passwordError: "", globalError: "" }),
+            navigate("/");
+            console.log("Current pathname:", location.pathname)
         })
         .catch(err => {
             const errorMessages = err.response?.data;
