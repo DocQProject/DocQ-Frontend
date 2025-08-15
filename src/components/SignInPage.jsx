@@ -97,7 +97,7 @@ function SignInPage() {
 
     return (
         <>
-            <div className="flex justify-center w-screen h-screen my-auto mx-auto py-40">
+            <div className="flex justify-center w-screen h-screen my-auto mx-auto py-10">
                 <div className="flex flex-col items-center">
                     <h1 className="font-bold text-5xl">로그인</h1>
                     <div className="mt-10 shadow-md rounded-lg p-15">
