@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { fetchDepartments } from "../api";
+import { fetchDepartments, fetchPosts } from "../api";
 
 function DepartmentIcon({ imageUrl, name }) {
     return (
@@ -21,10 +21,15 @@ function MainPage() {
     ]
 
     const [departments, setDepartments] = useState([]);
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
         fetchDepartments(setDepartments)
     }, []);
+
+    useEffect(() => {
+        fetchPosts(setPosts)
+    }, [])
 
     return (
         <>
@@ -47,7 +52,17 @@ function MainPage() {
                 <div className=" w-screen mx-auto px-100">
                     <p className="font-bold text-xl mb-10">인기 게시글</p>
                     <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
-                        {/* todo: 게시글  표시 부분 추가하기*/}
+                        {
+                            posts.length === 0 ? <p>게시글이 존재하지 않습니다.</p> :
+                            
+                            posts.map((post, index) => (
+                                <div key={index} className="flex flex-col">
+                                    <p>{post.title}</p>
+                                    <p>{post.author}</p>
+                                    <p>{post.viewCount}</p>
+                                    <p>{post.createdAt}</p>
+                                </div>
+                            ))}
                     </div>
                 </div>
             </main>

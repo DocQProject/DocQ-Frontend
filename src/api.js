@@ -57,3 +57,26 @@ export function fetchDepartments(setDepartments) {
         )
         .catch(err => console.log(err));
 }
+
+export function fetchPosts(setPosts) {
+    const token = localStorage.getItem("accessToken")?.trim();
+
+    axios.get(
+        "http://localhost:8080/api/posts",
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        },
+
+    )
+        .then((res) => {
+            //게시글 3개만 가져오기
+            console.log(res.data.content);
+            const limitedPosts = res.data.content.slice(0, 3);
+
+            setPosts(limitedPosts)
+        }
+        )
+}
