@@ -3,11 +3,48 @@ import { fetchDepartments, fetchPosts } from "../api";
 
 function DepartmentIcon({ imageUrl, name }) {
     return (
-        <div className="text-center bg-gray-200 px-10 py-7 rounded-lg shadow">
+        <div className="text-center bg-gray-200 px-10 py-5 rounded-lg shadow">
             <img
                 src={imageUrl}
+                className="px-2 py-2"
             />
             <p className="font-bold">{name}</p>
+        </div>
+    );
+}
+
+function Post({ title, author, content, viewCount, createdAt}) {
+    return (
+        <div className="bg-white border border-gray-200 hover:border-gray-300 px-4 py-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
+            <div className="mb-2">
+                <h3 className="font-semibold text-base text-gray-800 line-clamp-1 mb-1">
+                    {title}
+                </h3>
+                <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                    {content}
+                </p>
+            </div>
+            
+            <div className="flex items-center justify-between text-xs text-gray-500">
+                <div className="flex items-center space-x-3">
+                    <span className="flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                        </svg>
+                        {author}
+                    </span>
+                    <span className="flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                        </svg>
+                        {viewCount}
+                    </span>
+                </div>
+                <span className="text-gray-400">
+                    {createdAt}
+                </span>
+            </div>
         </div>
     );
 }
@@ -35,8 +72,8 @@ function MainPage() {
         <>
             <main>
                 {/* 진료과 표시 부분 */}
-                <div className="w-screen mx-auto px-100 flex-1 pt-[10rem] pb-[5rem]">
-                    <p className="font-bold text-xl mb-10">진료과로 병원 찾기</p>
+                <div className="w-screen mx-auto px-100 flex-1 pt-[10rem] pb-[2rem]">
+                    <p className="font-bold text-xl mb-5">진료과로 병원 찾기</p>
                     <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center w-full overflow-x-auto scrollbar-hide">
                         {departments.map((department, index) =>
                             <DepartmentIcon
@@ -49,20 +86,22 @@ function MainPage() {
                 </div>
 
                 {/* 인기 게시글 부분 */}
-                <div className=" w-screen mx-auto px-100">
-                    <p className="font-bold text-xl mb-10">인기 게시글</p>
-                    <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center">
+                <div className=" w-screen mx-auto px-100 ">
+                    <p className="font-bold text-xl mb-5">게시글</p>
+                    <div className="shadow-md rounded-lg p-10 fzlex gap-10 justify-center">
                         {
                             posts.length === 0 ? <p>게시글이 존재하지 않습니다.</p> :
-                            
-                            posts.map((post, index) => (
-                                <div key={index} className="flex flex-col">
-                                    <p>{post.title}</p>
-                                    <p>{post.author}</p>
-                                    <p>{post.viewCount}</p>
-                                    <p>{post.createdAt}</p>
-                                </div>
-                            ))}
+
+                                posts.map((post, index) => (
+                                    <Post 
+                                        key={index}
+                                        title={post.title}
+                                        author={post.author}
+                                        content={post.content}
+                                        viewCount={post.viewCount}
+                                        createdAt={post.createdAt}
+                                    />
+                                ))}
                     </div>
                 </div>
             </main>
