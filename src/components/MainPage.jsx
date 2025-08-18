@@ -72,7 +72,7 @@ function MainPage() {
         <>
             <main>
                 {/* 진료과 표시 부분 */}
-                <div className="w-screen mx-auto px-100 flex-1 pt-[10rem] pb-[2rem]">
+                <div className="w-full max-w-10xl mx-auto px-100 flex-1 pt-[10rem] pb-[2rem]">
                     <p className="font-bold text-xl mb-5">진료과로 병원 찾기</p>
                     <div className="shadow-md rounded-lg p-10 flex gap-10 justify-center w-full overflow-x-auto scrollbar-hide">
                         {departments.map((department, index) =>
@@ -86,9 +86,9 @@ function MainPage() {
                 </div>
 
                 {/* 게시글 부분 */}
-                <div className=" w-screen mx-auto px-100 ">
-                    <p className="font-bold text-xl mb-5">게시글</p>
-                    <div className="shadow-md rounded-lg p-10 fzlex gap-10 justify-center">
+                <div className=" w-full max-w-10xl mx-auto px-100 mb-10">
+                    <p className="font-bold text-xl mt-5 mb-5">게시글</p>
+                    <div className="shadow-md rounded-lg p-10 ">
                         {
                             posts.length === 0 ? <p>게시글이 존재하지 않습니다.</p> :
 
