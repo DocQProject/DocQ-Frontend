@@ -64,10 +64,13 @@ export function fetchPosts(setPosts) {
     axios.get(
         "http://localhost:8080/api/posts",
         {
+            params : {
+                "sort": "createdAt,desc"
+            },
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
-            }
+            },
         },
 
     )

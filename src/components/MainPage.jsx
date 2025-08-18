@@ -3,7 +3,7 @@ import { fetchDepartments, fetchPosts } from "../api";
 
 function DepartmentIcon({ imageUrl, name }) {
     return (
-        <div className="text-center bg-gray-200 px-10 py-5 rounded-lg shadow">
+        <div className="text-center bg-gray-100 px-10 py-5 rounded-lg shadow hover:shadow-md cursor-pointer">
             <img
                 src={imageUrl}
                 className="px-2 py-2"
@@ -15,12 +15,12 @@ function DepartmentIcon({ imageUrl, name }) {
 
 function Post({ title, author, content, viewCount, createdAt}) {
     return (
-        <div className="bg-white border border-gray-200 hover:border-gray-300 px-4 py-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
+        <div className="bg-white border border-gray-200 px-4 py-3 mt-5 rounded-lg shadow-sm hover:shadow-md cursor-pointer">
             <div className="mb-2">
-                <h3 className="font-semibold text-base text-gray-800 line-clamp-1 mb-1">
+                <h3 className="font-bold mb-3">
                     {title}
                 </h3>
-                <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                <p className="text-sm">
                     {content}
                 </p>
             </div>
@@ -85,7 +85,7 @@ function MainPage() {
                     </div>
                 </div>
 
-                {/* 인기 게시글 부분 */}
+                {/* 게시글 부분 */}
                 <div className=" w-screen mx-auto px-100 ">
                     <p className="font-bold text-xl mb-5">게시글</p>
                     <div className="shadow-md rounded-lg p-10 fzlex gap-10 justify-center">
@@ -99,7 +99,7 @@ function MainPage() {
                                         author={post.author}
                                         content={post.content}
                                         viewCount={post.viewCount}
-                                        createdAt={post.createdAt}
+                                        createdAt={post.createdAt.replace("T", " ")}
                                     />
                                 ))}
                     </div>
