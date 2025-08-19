@@ -1,12 +1,16 @@
 import axios from "axios";
 
+const api = axios.create({
+    baseURL: "http://localhost:8080/api",
+    headers: {
+        'Content-Type': 'application/json',
+    }
+});
+
 export function fetchSignIn(signInInfo, setErrors, navigate) {
-    axios.post(
-        "http://localhost:8080/api/auth/sign-in",
+    api.post(
+        "/auth/sign-in",
         signInInfo,
-        {
-            headers: { "Content-Type": "application/json" }
-        },
     )
         .then((res) => {
             localStorage.setItem("accessToken", res.data.token.trim()),
@@ -42,11 +46,10 @@ export function fetchSignIn(signInInfo, setErrors, navigate) {
 export function fetchDepartments(setDepartments) {
     const token = localStorage.getItem("accessToken")?.trim();
 
-    axios.get(
-        "http://localhost:8080/api/clinics/departments",
+    api.get(
+        "/clinics/departments",
         {
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             }
         },
@@ -56,4 +59,29 @@ export function fetchDepartments(setDepartments) {
             setDepartments(res.data.departments)
         )
         .catch(err => console.log(err));
+}
+
+export function fetchPosts(setPosts) {
+    const token = localStorage.getItem("accessToken")?.trim();
+    
+    api.get(
+        "/posts",
+        {
+            params : {
+                "sort": "createdAt,desc"
+            },
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+        },
+
+    )
+        .then((res) => {
+            //게시글 3개만 가져오기
+            console.log(res.data.content);
+            const limitedPosts = res.data.content.slice(0, 3);
+
+            setPosts(limitedPosts)
+        }
+        )
 }
