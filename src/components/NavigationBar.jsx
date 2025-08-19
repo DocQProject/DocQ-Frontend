@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { fetchSearchClinic } from "../api";
 
 function NavbarMenu({ url, menuName, subMenu = [] }) {
     const [isActiveMainSection, setIsActiveMainSection] = useState(false);
@@ -42,6 +43,13 @@ function NavbarMenu({ url, menuName, subMenu = [] }) {
 }
 
 function NavigationBar() {
+    const [searchKeyword, setSearchKeyword] = useState("")
+    const navigate = useNavigate();
+
+    function handleSearchSubmit (searchKeyword, navigate) {
+        navigate(`/search?q=${searchKeyword}`)
+    }
+
     return (
         <header className="fixed top-0 left-0 right-0 bg-white shadow px-25 py-5 h-30">
             <nav className="grid grid-cols-[1fr_2fr_1fr] items-center w-full h-full">
@@ -73,23 +81,28 @@ function NavigationBar() {
                         />
 
                         <NavbarMenu
-                            url="/"
+                            url="/clinic"
                             menuName="병원"
                             subMenu={["치과", "안과", "이비인후과", "피부과"]} //추후 url도 추가하기
                         />
                     </ul>
                 </div>
 
-                <div className="flex flex-row">
-                    <form role="search" className="flex max-w-md px-5">
+                <div className="flex flex-row py-5">
                         <input
                             type="search"
                             placeholder="검색..."
                             aria-label="Search"
-                            className="w-full px-3 py-2 border border-gray-300 rounded"
+                            value={searchKeyword}
+                            className="w-full px-3 py-2 border border-gray-300 rounded mx-5"
+                            onChange={e => setSearchKeyword(e.target.value)}
                         />
-                    </form>
-                    <button className="text-white bg-black px-4 py-2 rounded">
+                    <button 
+                        className="text-white bg-black px-4 py-2 rounded whitespace-nowrap"
+                        onClick={() => {
+                            handleSearchSubmit(searchKeyword, navigate)
+                        }}
+                    >
                         검색
                     </button>
                 </div>

@@ -85,3 +85,26 @@ export function fetchPosts(setPosts) {
         }
         )
 }
+
+export function fetchSearchClinicByQuery(keyword, currentPage, setSearchResult, setTotalPages) {
+    const token = localStorage.getItem("accessToken")?.trim();
+    
+    api.get(
+        "/search",
+        {
+            params : {
+                "q": `${keyword}`,
+                "page": `${currentPage}`
+            },
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+        },
+
+    )
+        .then((res) => {
+            console.log(res.data);
+            setTotalPages(res.data.page.totalPages)
+            setSearchResult(res.data.content)
+        })
+}

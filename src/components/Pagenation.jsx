@@ -1,11 +1,9 @@
 export function Pagination({
-    num,
-    size,
+    totalPages,
     setCurrentPage,
     currentPage
 }) {
     const pageList = [];
-    const totalPages = Math.ceil(num / size);
 
     for (let i = 1; i <= totalPages; i++) {
         pageList.push(i);
@@ -31,22 +29,22 @@ export function Pagination({
     }
 
     return (
-        <div className="flex w-screen mx-auto justify-center">
-            <button className="text-white bg-black px-4 py-2 rounded" onClick={goToPrevPage} disabled={currentPage === 1}>
+        <div className="flex w-full mx-auto justify-center">
+            <button className="text-white bg-black px-4 py-2 rounded" onClick={goToPrevPage} disabled={currentPage === 0}>
                 이전
             </button>
 
             {pageList.map((page) => (
                 <button 
                     key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`text-white bg-black px-4 py-2 rounded mx-1 ${currentPage === page ? "active" : ""}`}
+                    onClick={() => setCurrentPage(page + 1)}
+                    className={`text-white bg-black px-4 py-2 rounded mx-1 ${currentPage === page - 1? "active" : ""}`}
                 >
                     {page}  
                 </button>
             ))}
 
-            <button className="text-white bg-black px-4 py-2 rounded" onClick={goToNextPage} disabled={currentPage === pageList.length}>
+            <button className="text-white bg-black px-4 py-2 rounded" onClick={goToNextPage} disabled={currentPage === pageList.length - 1}>
                 다음
             </button>
         </div>
