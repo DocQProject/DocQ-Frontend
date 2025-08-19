@@ -85,3 +85,26 @@ export function fetchPosts(setPosts) {
         }
         )
 }
+
+// MyPage
+export async function fetchUserInfo() {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.get('/users/me',
+                {
+            headers: { 
+                "Content-Type": "application/json", 
+                "Authorization": `Bearer ${token}`
+            }
+        },
+    )
+}
+
+export const updateUserInfo = (formData) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.patch('/users/profile', formData, {
+        headers: { 
+            "Content-Type": "application/json", 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
