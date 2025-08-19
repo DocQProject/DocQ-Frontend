@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { fetchSearchClinic } from "../api";
 
 function NavbarMenu({ url, menuName, subMenu = [] }) {
     const [isActiveMainSection, setIsActiveMainSection] = useState(false);
@@ -29,9 +28,9 @@ function NavbarMenu({ url, menuName, subMenu = [] }) {
                             className="font-bold my-5 cursor-pointer"
                             onMouseEnter={() => setIsActiveSubSection(index)}
                             onMouseLeave={() => setIsActiveSubSection("")}
-                        >   
-                            <span className={`py-3 border-b-2 transition-colors ${isActiveSubSection === index? "text-blue-600 border-blue-600 " : "border-transparent"}`}>
-                                {item}    
+                        >
+                            <span className={`py-3 border-b-2 transition-colors ${isActiveSubSection === index ? "text-blue-600 border-blue-600 " : "border-transparent"}`}>
+                                {item}
                             </span>
                         </li>
                     ))}
@@ -46,7 +45,7 @@ function NavigationBar() {
     const [searchKeyword, setSearchKeyword] = useState("")
     const navigate = useNavigate();
 
-    function handleSearchSubmit (searchKeyword, navigate) {
+    function handleSearchSubmit(searchKeyword, navigate) {
         navigate(`/search?q=${searchKeyword}`)
     }
 
@@ -89,15 +88,16 @@ function NavigationBar() {
                 </div>
 
                 <div className="flex flex-row py-5">
-                        <input
-                            type="search"
-                            placeholder="검색..."
-                            aria-label="Search"
-                            value={searchKeyword}
-                            className="w-full px-3 py-2 border border-gray-300 rounded mx-5"
-                            onChange={e => setSearchKeyword(e.target.value)}
-                        />
-                    <button 
+                    <input
+                        type="search"
+                        placeholder="검색..."
+                        aria-label="Search"
+                        value={searchKeyword}
+                        className="w-full px-3 py-2 border border-gray-300 rounded mx-5"
+                        onChange={e => setSearchKeyword(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" ? handleSearchSubmit(searchKeyword, navigate): null}
+                    />
+                    <button
                         className="text-white bg-black px-4 py-2 rounded whitespace-nowrap"
                         onClick={() => {
                             handleSearchSubmit(searchKeyword, navigate)

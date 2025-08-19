@@ -37,7 +37,7 @@ export function Pagination({
             {pageList.map((page) => (
                 <button 
                     key={page}
-                    onClick={() => setCurrentPage(page + 1)}
+                    onClick={() => setCurrentPage(page - 1)}
                     className={`text-white bg-black px-4 py-2 rounded mx-1 ${currentPage === page - 1? "active" : ""}`}
                 >
                     {page}  
