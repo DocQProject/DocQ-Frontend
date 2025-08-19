@@ -19,12 +19,12 @@ function SignUpFormData({ value, inputPlaceholder, check = false }) {
     );
 }
 
-// 추후 useLocation을 통해 현재 URL 경로를 확인한 후 회원가입 요청 시 사용자 권한(ROLE_USER 또는 ROLE_DOCTOR)을 동적으로 설정할 예정
+// 추후 useLocation을 통해 현재 URL 경로를 확   인한 후 회원가입 요청 시 사용자 권한(ROLE_USER 또는 ROLE_DOCTOR)을 동적으로 설정할 예정
 function SignUpPage() {
     return (
         <>
             {/* 회원가입 폼 */}
-            <div className="flex justify-center h-screen w-screen mx-auto my-auto py-30">
+            <div className="flex justify-center h-screen w-screen mx-auto my-auto py-10">
                 <div className="flex flex-col items-center">
                     <h1 className="font-bold text-5xl">회원가입</h1>
                     <div className="mt-10 shadow-md rounded-lg p-15 ">
