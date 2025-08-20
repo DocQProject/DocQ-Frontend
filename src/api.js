@@ -85,3 +85,21 @@ export function fetchPosts(setPosts) {
         }
         )
 }
+
+export function fetchSignUp(signUpInfo) {
+    
+    return api.post(
+        "/auth/sign-up",
+        signUpInfo,
+    )
+}
+
+export function fetchCheckLoginIdAvailability(loginId) {
+    
+    return api.post(
+        "/auth/check/loginId",
+        {
+            "loginId": `${loginId}`    
+        }
+    )
+}

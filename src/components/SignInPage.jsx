@@ -57,7 +57,6 @@ function SignInField({ baseField, showPassword, setShowPassword, setSignInInfo }
                 isError ?
                     <FieldErrorMessage
                         value={baseField.error}
-                        setSignInInfo={setSignInInfo}
                     /> : null
             }
         </div>
