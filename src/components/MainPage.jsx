@@ -1,9 +1,17 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, } from "react"
 import { fetchDepartments, fetchPosts } from "../api";
+import { useNavigate } from "react-router-dom";
 
-function DepartmentIcon({ imageUrl, name }) {
+function handleNavigateDepartment(name, navigate) {
+    navigate(`/search?q=${name}`)
+}
+
+function DepartmentIcon({ imageUrl, name, navigate }) {
     return (
-        <div className="text-center bg-gray-100 px-10 py-5 rounded-lg shadow hover:shadow-md cursor-pointer">
+        <div
+            className="text-center bg-gray-100 px-10 py-5 rounded-lg shadow hover:shadow-md cursor-pointer"
+            onClick={() => handleNavigateDepartment(name, navigate)}
+        >
             <img
                 src={imageUrl}
                 className="px-2 py-2"
@@ -13,7 +21,7 @@ function DepartmentIcon({ imageUrl, name }) {
     );
 }
 
-function Post({ title, author, content, viewCount, createdAt}) {
+function Post({ title, author, content, viewCount, createdAt }) {
     return (
         <div className="bg-white border border-gray-200 px-4 py-3 mt-5 rounded-lg shadow-sm hover:shadow-md cursor-pointer">
             <div className="mb-2">
@@ -24,7 +32,7 @@ function Post({ title, author, content, viewCount, createdAt}) {
                     {content}
                 </p>
             </div>
-            
+
             <div className="flex items-center justify-between text-xs text-gray-500">
                 <div className="flex items-center space-x-3">
                     <span className="flex items-center">
@@ -59,13 +67,25 @@ function MainPage() {
 
     const [departments, setDepartments] = useState([]);
     const [posts, setPosts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchDepartments(setDepartments)
+            .then((res) =>
+                setDepartments(res.data.departments)
+            )
+            .catch(err => console.log(err));
     }, []);
 
     useEffect(() => {
-        fetchPosts(setPosts)
+        fetchPosts()
+            .then((res) => {
+                //게시글 3개만 가져오기
+                console.log(res.data.content);
+                const limitedPosts = res.data.content.slice(0, 3);
+
+                setPosts(limitedPosts)
+            })
     }, [])
 
     return (
@@ -80,6 +100,7 @@ function MainPage() {
                                 key={index}
                                 name={department.name}
                                 imageUrl={departmentsIcon[index]}
+                                navigate={navigate}
                             />
                         )}
                     </div>
@@ -93,7 +114,7 @@ function MainPage() {
                             posts.length === 0 ? <p>게시글이 존재하지 않습니다.</p> :
 
                                 posts.map((post, index) => (
-                                    <Post 
+                                    <Post
                                         key={index}
                                         title={post.title}
                                         author={post.author}

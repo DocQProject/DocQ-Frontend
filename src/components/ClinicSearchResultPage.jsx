@@ -1,43 +1,73 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pagination } from './Pagenation';
+import { useSearchParams  } from 'react-router-dom';
+import { fetchSearchClinicByQuery } from '../api';
 
 function ClinicData({ name, address, department, open, close, starPoint }) {
     return (
-        <div className="flex flex-col items-center w-screen mx-auto mb-15">
-            <div className="shadow-md rounded-lg p-10 px-10 md:w-[800px] md:h-[300px]">
-                <h2 className="font-bold text-5xl">{name} <span className="text-xl">{starPoint}</span></h2>
-                <p className="mt-5 text-2xl"> {open} ~ {close}</p>
-                <p className="mt-5 text-2xl">{address}</p>
-                <p className="mt-5 text-2xl">{department}</p>
+         <div className="flex justify-center w-full px-4 mb-10">
+            <div className="w-full md:w-[750px] bg-white rounded-2xl shadow-md p-8 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+                
+                {/* 병원명 + 별점 */}
+                <div className="flex items-center justify-between border-b pb-3 mb-4">
+                    <h2 className="font-bold text-3xl text-gray-800">{name}</h2>
+                    <span className="text-lg font-semibold">
+                        ⭐ 평균 평점: {starPoint ?? "N/A"}
+                    </span>
+                </div>
+
+                {/* 상세 정보 */}
+                <div className="space-y-3 text-gray-700 text-lg">
+                    <p><span className="font-semibold text-gray-800">영업 시간:</span> {open} ~ {close}</p>
+                    <p><span className="font-semibold text-gray-800">주소:</span> {address}</p>
+                    <p><span className="font-semibold text-gray-800">진료과:</span> {department}</p>
+                </div>
             </div>
         </div>
     );
 }
+
 function ClinicSearchResultPage() {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [searchResult, setSearchResult] = useState([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [totalPages, setTotalPages] = useState(1);
+
+    useEffect(() => {
+        const keyword = searchParams.get("q");
+        fetchSearchClinicByQuery(keyword, currentPage)
+        .then((res) => {
+            console.log(res.data);
+            setTotalPages(res.data.page.totalPages)
+            setSearchResult(res.data.content)
+        })
+    }, [searchParams, currentPage])
+
     return (
         <>
-            <main className="flex-1 overflow-y-auto pt-[8rem] pb-[5rem]">
-                {/* 예시 */}
-                <ClinicData
-                    name="밝은 성모 안과"
-                    address="주소"
-                    department="안과"
-                    open="09:00"
-                    close="16:30"
-                    starPoint="별점: 4"
-                />
+            <main className="flex-1 overflow-y-auto pt-[10rem] pb-[5rem]">
+                {
+                    searchResult.map((result, index) =>
+                        <ClinicData
+                            key={index}
+                            name={result.name}
+                            address={result.address}
+                            department={result.department}
+                            open={result.openTime}
+                            close={result.closeTime}
+                            starPoint={result.starPoint}
+                        />
+                    )
+                }
             </main>
 
-            {/* 추후 백엔드 연동 시 num, size 수정*/}
-            <footer className="flex fixed bottom-5 left-0 right-0">
+            <div className="fixed bottom-0 left-0 right-0 bg-white shadow px-25 py-5 h-30">
                 <Pagination
-                    num="1"
-                    size="1"
+                    totalPages={totalPages}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                 />
-            </footer>
+            </div>
         </>
     );
 }
