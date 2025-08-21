@@ -35,7 +35,12 @@ function ClinicSearchResultPage() {
 
     useEffect(() => {
         const keyword = searchParams.get("q");
-        fetchSearchClinicByQuery(keyword, currentPage, setSearchResult, setTotalPages)
+        fetchSearchClinicByQuery(keyword, currentPage)
+        .then((res) => {
+            console.log(res.data);
+            setTotalPages(res.data.page.totalPages)
+            setSearchResult(res.data.content)
+        })
     }, [searchParams, currentPage])
 
     return (
