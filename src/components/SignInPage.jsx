@@ -77,7 +77,36 @@ function SignInPage() {
         e.preventDefault();
 
         setErrors({ loginIdError: "", passwordError: "" });
-        fetchSignIn(signInInfo, setErrors, navigate)
+        fetchSignIn(signInInfo)
+        .then((res) => {
+            localStorage.setItem("accessToken", res.data.token.trim()),
+            setErrors({ loginIdError: "", passwordError: "", globalError: "" }),
+            navigate("/");
+        })
+        .catch(err => {
+            const errorMessages = err.response?.data;
+            const Errors = {};
+
+            //잘못된 로그인 정보를 입력한 경우
+            if (err.response?.status === 404 || err.response?.status === 401) {
+                Errors.globalError = "아이디 혹은 비밀번호가 일치하지 않습니다.";
+            }
+
+            //유효성 검증이 실패한 경우
+            if (err.response?.status === 400) {
+
+                errorMessages.forEach(element => {
+                    if (element.includes("아이디")) {
+                        Errors.loginIdError = element;
+                    }
+                    if (element.includes("비밀번호")) {
+                        Errors.passwordError = element;
+                    }
+                });
+            }
+
+            setErrors(prev => ({ ...prev, ...Errors }));
+        })
     }
 
     //비밀번호 초기화 (에러가 발생한 경우)
