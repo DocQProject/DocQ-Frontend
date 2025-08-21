@@ -87,6 +87,8 @@ export function fetchPosts(setPosts) {
 }
 
 // MyPage
+
+// Profile 관련 API
 export async function fetchUserInfo() {
     const token = localStorage.getItem("accessToken").trim();
     return api.get('/users/me',
@@ -106,5 +108,59 @@ export const updateUserInfo = (formData) => {
             "Content-Type": "application/json", 
             "Authorization": `Bearer ${token}`
         }
+    });
+}
+
+// Reservation 관련 API
+export const fetchReservations = () => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.get('/reservations/me', {
+        headers: { 
+            "Content-Type": "application/json", 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+// 병원 관련 API
+export const fetchMyClinicInfo = () => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.get('/clinics/my-clinic', {
+        headers: { 
+            "Content-Type": "application/json", 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+export const registerMyClinic = (clinicData) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.post('/clinics', clinicData, {
+        headers: { 
+            "Content-Type": "application/json", 
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}
+
+export const deleteClinic = () => { 
+    const token = localStorage.getItem("accessToken").trim();
+    return api.delete('/clinics/my-clinic', {
+        headers: { 
+            "Content-Type": "application/json", 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+// 회원탈퇴 API
+export const deleteAccount = (password) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.delete('/users', {
+        headers: { 
+            "Content-Type": "application/json", 
+            "Authorization": `Bearer ${token}`
+        },
+        data: password
     });
 }

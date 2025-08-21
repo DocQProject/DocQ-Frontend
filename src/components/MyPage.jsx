@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
-import { fetchUserInfo, updateUserInfo } from "../api";
+import { useNavigate } from "react-router-dom";
+import {
+  fetchUserInfo,
+  updateUserInfo,
+  fetchReservations,
+  deleteAccount,
+  fetchMyClinicInfo,
+  registerMyClinic,
+  deleteClinic,
+} from "../api";
 
 function SideBarButton({ label, deleteAcount = false, onClick }) {
   return (
@@ -14,6 +23,7 @@ function SideBarButton({ label, deleteAcount = false, onClick }) {
   );
 }
 
+// Profile
 function ProfileFormField({
   label,
   type = "text",
@@ -23,19 +33,19 @@ function ProfileFormField({
   error,
 }) {
   return (
-      <div className="flex items-center gap-2 sm:gap-4">
-        <span className="w-20 font-bold text-gray-500 shrink-0">{label}</span>
-        <div className="flex flex-col w-full">
-          <input
-            type={type}
-            value={value}
-            readOnly={readOnly}
-            onChange={onChange}
-            className="w-full border rounded px-3 py-2 focus:ring"
-          />
-          {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
-        </div>
+    <div className="flex items-center gap-2 sm:gap-4">
+      <span className="w-20 font-bold text-gray-500 shrink-0">{label}</span>
+      <div className="flex flex-col w-full">
+        <input
+          type={type}
+          value={value}
+          readOnly={readOnly}
+          onChange={onChange}
+          className="w-full border rounded px-3 py-2 focus:ring"
+        />
+        {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
       </div>
+    </div>
   );
 }
 
@@ -158,41 +168,266 @@ function ProfileSection({ user, onUserUpdate }) {
   );
 }
 
-function ReservationSection({ hospital, date, time, comment, status }) {
+function ReservationSection({ reservations }) {
+  if (reservations.length === 0) {
+    return <div className="text-center text-gray-500">예약이 없습니다.</div>;
+  }
+
+  return reservations.map((res) => (
+    <ReservationCard
+      key={res.reservationId}
+      clinic={res.clinicName}
+      date={res.date}
+      time={res.time}
+      message={res.message}
+      status={res.status}
+    />
+  ));
+}
+
+function ReservationCard({ clinic, date, time, message, isDeleted }) {
   return (
-    <div className="border rounded-lg p-4 shadow-sm flex flex-col gap-2 bg-gray-50">
-      <div className="text-lg font-bold">{hospital}</div>
+    <div className="border rounded-lg p-4 shadow-sm flex flex-col gap-2 bg-gray-50 mb-4">
+      <div className="text-lg font-bold">{clinic}</div>
       <div className="text-sm text-gray-600">예약일: {date}</div>
       <div className="text-sm text-gray-600">시간: {time}</div>
-      <div className="text-sm text-gray-600">코멘트: {comment}</div>
-      <div className="text-sm font-semibold text-blue-600">현황: {status}</div>
+      <div className="text-sm text-gray-600">코멘트: {message}</div>
+      <div className="text-sm font-semibold text-blue-600">
+        예약현황: {isDeleted ? "취소" : "예약완료"}
+      </div>
     </div>
   );
 }
 
-function ClinicSection() {
+function ClinicSection( {clinic, onClinicUpdate} ) {
+  const [formData, setFormData] = useState({
+    name: "",
+    address: "",
+    department: "",
+    openTime: "",
+    closeTime: "",
+  });
+
+  const loadClinicData = () => {
+    fetchMyClinicInfo()
+      .then((res) => {
+        const data = res.data;
+        setFormData(
+          data
+            ? {
+                name: data.name || "",
+                address: data.address || "",
+                department: data.department || "",
+                openTime: data.openTime || "",
+                closeTime: data.closeTime || "",
+              }
+            : null
+        );
+      })
+      .catch((err) => {
+        console.error("Error fetching clinic info:", err);
+        setFormData(null);
+      });
+  };
+
+  useEffect(() => {
+    loadClinicData();
+  }, []);
+
+  const handleRegisterClinic = async (e) => {
+    e.preventDefault();
+
+    await registerMyClinic(formData)
+      .then(() => {
+        alert("병원이 등록되었습니다.");
+        if (onClinicUpdate) {
+          onClinicUpdate(formData);
+        }
+      })
+      .catch((err) => {
+        console.error("Error registering clinic:", err);
+        alert("병원 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+      });
+  };
+
+  const handleDeleteClinic = () => {
+    deleteClinic()
+      .then(() => {
+        const confirmDelete = window.confirm(
+          "정말로 병원을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
+        );
+        if (!confirmDelete) return;
+        alert("병원이 삭제되었습니다.");
+        setFormData(null);
+      })
+      .catch((err) => {
+        console.error("Error deleting clinic:", err);
+        alert("병원 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+      });
+  };
+
+  if (!clinic) {
+    return (
+      <form className="flex flex-col gap-4 w-full">
+        <ClinicInput
+          label="병원 이름"
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        />
+        <ClinicInput
+          label="병원 주소"
+          onChange={(e) =>
+            setFormData({ ...formData, address: e.target.value })
+          }
+        />
+        <ClinicInput
+          label="진료과"
+          onChange={(e) =>
+            setFormData({ ...formData, department: e.target.value })
+          }
+        />
+        <ClinicInput
+          label="영업 시작 시간"
+          onChange={(e) =>
+            setFormData({ ...formData, openTime: e.target.value })
+          }
+          type="time"
+        />
+        <ClinicInput
+          label="영업 종료 시간"
+          onChange={(e) =>
+            setFormData({ ...formData, closeTime: e.target.value })
+          }
+          type="time"
+        />
+        <div className="flex justify-end">
+          <button
+            type="button"
+            className="font-bold bg-black text-white rounded px-4 py-2 hover:bg-gray-800 transition"
+            onClick={handleRegisterClinic}
+          >
+            내 병원 등록
+          </button>
+        </div>
+      </form>
+    );
+  }
+
   return (
     <form className="flex flex-col gap-4 w-full">
-      <ClinicLabel label="병원 이름" />
-      <ClinicLabel label="병원 주소" />
-      <ClinicLabel label="진료과" />
-      <ClinicLabel label="영업 시작 시간" />
-      <ClinicLabel label="영업 종료 시간" />
+      <ClinicLabel label="병원 이름" value={clinic.name} />
+      <ClinicLabel label="병원 주소" value={clinic.address} />
+      <ClinicLabel label="진료과" value={clinic.department} />
+      <ClinicLabel label="영업 시작 시간" value={clinic.openTime} />
+      <ClinicLabel label="영업 종료 시간" value={clinic.closeTime} />
       <div className="flex justify-end">
-        <button className="font-bold bg-black text-white rounded px-4 py-2 hover:bg-gray-800 transition">
-          등록
+        <button
+          className="font-bold bg-black text-white rounded px-4 py-2 hover:bg-gray-800 transition"
+          onClick={handleDeleteClinic}
+        >
+          내 병원 삭제
         </button>
       </div>
     </form>
   );
 }
 
-function ClinicLabel({ label }) {
+function ClinicLabel({ label, value }) {
   return (
     <label className="flex flex-col">
       <span className="font-bold text-gray-500">{label}</span>
-      <input type="text" className="border rounded px-3 py-2 focus:ring" />
+      <input
+        type="text"
+        className="border rounded px-3 py-2 focus:ring"
+        value={value}
+        readOnly
+      />
     </label>
+  );
+}
+
+function ClinicInput({ label, type = "text", value, onChange }) {
+  return (
+    <label className="flex flex-col">
+      <span className="font-bold text-gray-500">{label}</span>
+      <input
+        type={type}
+        className="border rounded px-3 py-2 focus:ring"
+        value={value}
+        onChange={onChange}
+      />
+    </label>
+  );
+}
+
+// 회원탈퇴 섹션
+function DeleteAccountSection({}) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    if (!password) {
+      setError("비밀번호를 입력해주세요.");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      "정말로 회원탈퇴 하시겠습니까? 이 작업은 되돌릴 수 없습니다."
+    );
+
+    if (!confirmDelete) return;
+
+    setIsDeleting(true);
+    setError("");
+
+    try {
+      // 예시 API 호출
+      await deleteAccount({ password });
+      alert("회원탈퇴가 완료되었습니다.");
+
+      localStorage.removeItem("accessToken");
+      // 로그아웃 후 메인 페이지로 이동
+      navigate("/sign-in");
+    } catch (err) {
+      console.error(err);
+      setError(
+        err.response?.data ||
+          "회원탈퇴 중 오류가 발생했습니다. 다시 시도해주세요."
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <div className="flex-1 shadow p-6 rounded-lg bg-white max-w-md mx-auto">
+      <h2 className="text-2xl font-bold mb-4 text-red-600">회원탈퇴</h2>
+      <p className="mb-4 text-gray-700">
+        회원탈퇴를 진행하려면 비밀번호를 입력하고 버튼을 클릭해주세요.
+      </p>
+
+      <div className="flex flex-col gap-4">
+        <ProfileFormField
+          label="비밀번호"
+          type="password"
+          value={password}
+          readOnly={false}
+          onChange={(e) => setPassword(e.target.value)}
+          error={error}
+        />
+
+        <button
+          className={`font-bold bg-red-600 text-white rounded px-4 py-2 hover:bg-red-700 transition ${
+            isDeleting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={handleDelete}
+          disabled={isDeleting}
+        >
+          회원탈퇴
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -200,6 +435,8 @@ function MyPage() {
   const [activeSection, setActiveSection] = useState("내 정보");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [reservations, setReservations] = useState([]);
+  const [clinic, setClinic] = useState(null);
 
   useEffect(() => {
     if (activeSection === "내 정보") {
@@ -211,28 +448,32 @@ function MyPage() {
     }
   }, [activeSection]);
 
+  useEffect(() => {
+    if (activeSection === "내 예약") {
+      fetchReservations()
+        .then((res) => setReservations(res.data.content))
+        .catch((err) => console.error(err));
+    }
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (activeSection === "내 병원") {
+      fetchMyClinicInfo()
+        .then((res) => setClinic(res.data))
+        .catch((err) => console.error(err));
+    }
+  }, [activeSection]);
+
   const renderContent = () => {
     switch (activeSection) {
       case "내 정보":
         return <ProfileSection user={user} onUserUpdate={setUser} />;
       case "내 병원":
-        return <ClinicSection />;
+        return <ClinicSection clinic={clinic} onClinicUpdate={setClinic}/>;
       case "내 예약":
-        return (
-          <ReservationSection
-            hospital="서울병원"
-            date="2023-10-01"
-            time="14:00"
-            comment="첫 방문입니다."
-            status="예약 완료"
-          />
-        );
+        return <ReservationSection reservations={reservations} />;
       case "회원탈퇴":
-        return (
-          <div className="flex-1 shadow p-6 rounded-lg bg-white text-3xl">
-            회원탈퇴
-          </div>
-        );
+        return <DeleteAccountSection />;
       default:
         return null;
     }
