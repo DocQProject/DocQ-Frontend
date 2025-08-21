@@ -1,9 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+function navigateBySubMenu(item, navigate) {
+    navigate(`/search?q=${item}`)
+}
+
 function NavbarMenu({ url, menuName, subMenu = [] }) {
     const [isActiveMainSection, setIsActiveMainSection] = useState(false);
     const [isActiveSubSection, setIsActiveSubSection] = useState("");
+    const navigate = useNavigate();
     const isSubMenuActive = isActiveMainSection && subMenu.length !== 0;
 
     return (
@@ -28,6 +33,7 @@ function NavbarMenu({ url, menuName, subMenu = [] }) {
                             className="font-bold my-5 cursor-pointer"
                             onMouseEnter={() => setIsActiveSubSection(index)}
                             onMouseLeave={() => setIsActiveSubSection("")}
+                            onClick={() => navigateBySubMenu(item, navigate)}
                         >
                             <span className={`py-3 border-b-2 transition-colors ${isActiveSubSection === index ? "text-blue-600 border-blue-600 " : "border-transparent"}`}>
                                 {item}
@@ -82,7 +88,7 @@ function NavigationBar() {
                         <NavbarMenu
                             url="/clinic"
                             menuName="병원"
-                            subMenu={["치과", "안과", "이비인후과", "피부과"]} //추후 url도 추가하기
+                            subMenu={["치과", "안과", "이비인후과", "피부과"]}
                         />
                     </ul>
                 </div>
@@ -95,7 +101,7 @@ function NavigationBar() {
                         value={searchKeyword}
                         className="w-full px-3 py-2 border border-gray-300 rounded mx-5"
                         onChange={e => setSearchKeyword(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" ? handleSearchSubmit(searchKeyword, navigate): null}
+                        onKeyDown={(e) => e.key === "Enter" ? handleSearchSubmit(searchKeyword, navigate) : null}
                     />
                     <button
                         className="text-white bg-black px-4 py-2 rounded whitespace-nowrap"

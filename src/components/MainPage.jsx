@@ -1,9 +1,17 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, } from "react"
 import { fetchDepartments, fetchPosts } from "../api";
+import { useNavigate } from "react-router-dom";
 
-function DepartmentIcon({ imageUrl, name }) {
+function handleNavigateDepartment(name, navigate) {
+    navigate(`/search?q=${name}`)
+}
+
+function DepartmentIcon({ imageUrl, name, navigate}) {
     return (
-        <div className="text-center bg-gray-100 px-10 py-5 rounded-lg shadow hover:shadow-md cursor-pointer">
+        <div 
+            className="text-center bg-gray-100 px-10 py-5 rounded-lg shadow hover:shadow-md cursor-pointer"
+            onClick={() => handleNavigateDepartment(name, navigate)}
+        >
             <img
                 src={imageUrl}
                 className="px-2 py-2"
@@ -59,6 +67,7 @@ function MainPage() {
 
     const [departments, setDepartments] = useState([]);
     const [posts, setPosts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchDepartments(setDepartments)
@@ -80,6 +89,7 @@ function MainPage() {
                                 key={index}
                                 name={department.name}
                                 imageUrl={departmentsIcon[index]}
+                                navigate={navigate}
                             />
                         )}
                     </div>
