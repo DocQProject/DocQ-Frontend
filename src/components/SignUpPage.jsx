@@ -1,46 +1,11 @@
 import { useState } from "react";
 import { fetchCheckLoginIdAvailability, fetchSignUp } from "../api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CheckBox from "./common/CheckBox";
-
-function FieldErrorMessage({ value }) {
-    return (
-        <p
-            className="font-bold text-top text-xs text-red-400 mt-5 ml-40 "
-        > {value}</p>
-    );
-}
-
-function SuccessLoginIdMessage({ value }) {
-    return (
-        <p
-            className="font-bold text-top text-xs text-green-600 mt-5 ml-40 "
-        > {value}</p>
-    );
-}
-
-function handleCheckLoginId(loginId, setCheckLoginId, setErrors) {
-    fetchCheckLoginIdAvailability(loginId)
-        .then((res) => {
-            console.log(res.data)
-            setErrors((prev) => ({
-                ...prev,
-                "loginIdError": ""
-            }))
-            setCheckLoginId(res.data)
-        })
-        .catch((err) => {
-            setErrors((prev) => ({
-                ...prev,
-                "loginIdError": err.response?.data
-            }))
-        })
-}
 
 function SignUpFormData({ name, value, type, inputPlaceholder, check = false, checkLoginId, setCheckLoginId, error, setErrors, showPassword, setShowPassword }) {
     const [loginId, setLoginId] = useState("")
     const isError = error !== ""
-
     const button = check ?
         <button
             type="button"
@@ -73,15 +38,10 @@ function SignUpFormData({ name, value, type, inputPlaceholder, check = false, ch
                     {button}
                 </div>
                 {
-                    isError ?
-                        <FieldErrorMessage
-                            value={error}
-                        /> : null
-                }
-                {
-                    checkLoginId ?
-                        <SuccessLoginIdMessage
-                            value="사용 가능한 아이디입니다."
+                    isError || checkLoginId ?
+                        <FieldMessage
+                            value={isError ? error: "사용 가능한 아이디 입니다."}
+                            isSuccess={isError ? false : true}
                         /> : null
                 }
             </div>
@@ -89,18 +49,91 @@ function SignUpFormData({ name, value, type, inputPlaceholder, check = false, ch
     );
 }
 
-// 추후 useLocation을 통해 현재 URL 경로를 확인한 후 회원가입 요청 시 사용자 권한(ROLE_USER 또는 ROLE_DOCTOR)을 동적으로 설정할 예정
+function FieldMessage({ value, isSuccess }) {
+    return (
+        <p
+            className={`font-bold text-top text-xs mt-5 ml-40 ${isSuccess ? "text-green-600" : "text-red-400"}`}
+        > {value}</p>
+    );
+}
+
+function handleCheckLoginId(loginId, setCheckLoginId, setErrors) {
+    fetchCheckLoginIdAvailability(loginId)
+        .then((res) => {
+            console.log(res.data)
+            setErrors((prev) => ({
+                ...prev,
+                "loginIdError": ""
+            }))
+            setCheckLoginId(res.data)
+        })
+        .catch((err) => {
+            setErrors((prev) => ({
+                ...prev,
+                "loginIdError": err.response?.data
+            }))
+        })
+}
+
+function handleError(errorMessages) {
+    const errors = {}
+    if (errorMessages.includes("아이디")) {
+        errors.loginIdError = errorMessages;
+    }
+    if (errorMessages.includes("비밀번호")) {
+        errors.checkPasswordError = errorMessages;
+    }
+
+    return errors;
+}
+
+function handleValidationError(errorMessages, isPasswordEmpty, isEmailEmpty) {
+    const errors = {}
+    errorMessages.forEach(m => {
+        if (m.includes("아이디")) {
+            errors.loginIdError = m;
+        }
+        if (m.includes("비밀번호")) {
+            if (isPasswordEmpty && m.includes("필수")) {
+                errors.passwordError = m;
+            }
+            if (!isPasswordEmpty && m.includes("형식")) {
+                errors.passwordError = m;
+            }
+        }
+        if (m.includes("재입력")) {
+            errors.checkPasswordError = m;
+        }
+        if (m.includes("이름")) {
+            errors.nameError = m;
+        }
+        if (m.includes("이메일")) {
+            if (isEmailEmpty && m.includes("필수")) {
+                errors.emailError = m;
+            }
+            if (!isEmailEmpty && m.includes("형식")) {
+                errors.emailError = m;
+            }
+        }
+    })
+
+    return errors;
+}
+
 function SignUpPage() {
     const [checkLoginId, setCheckLoginId] = useState(false)
-    const [errors, setErrors] = useState({
+    const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+    const initialErrors = {
         nameError: "",
         emailError: "",
         loginIdError: "",
         passwordError: "",
         checkPasswordError: "",
-    })
-    const navigate = useNavigate();
-    const [showPassword, setShowPassword] = useState(false);
+    }
+    const [errors, setErrors] = useState(initialErrors)
+    const location = useLocation();
+    const role = location.pathname.includes("/doctor") ? "ROLE_DOCTOR" : "ROLE_USER";
 
     const handleSignUpSubmit = (e) => {
         e.preventDefault();
@@ -111,79 +144,33 @@ function SignUpPage() {
             password: `${e.target.password.value}`,
             checkPassword: `${e.target.checkPassword.value}`,
             email: `${e.target.email.value}`,
-            role: "ROLE_USER"
+            role: `${role}`
         }
+        const isPasswordEmpty = e.target.password.value === "";
+        const isEmailEmpty = e.target.email.value === "";
 
+        setErrors(initialErrors);
         fetchSignUp(signUpInfo)
             .then((res) => {
                 localStorage.setItem("accessToken", res.data.token.trim()),
-                    setErrors({
-                        nameError: "",
-                        emailError: "",
-                        loginIdError: "",
-                        passwordError: "",
-                        checkPasswordError: "",
-                    }),
-                    navigate("/");
+                    setErrors(initialErrors);
+                navigate("/");
             })
             .catch((err => {
                 const errorMessages = err.response?.data;
-                setErrors({
-                    nameError: "",
-                    emailError: "",
-                    loginIdError: "",
-                    passwordError: "",
-                    checkPasswordError: "",
-                });
-                const Errors = {};
-
-                console.log(err.response)
-                console.log(err.response.data)
+                let errors = {};
 
                 //잘못된 정보를 입력한 경우
                 if (err.response?.status === 409 || err.response?.status === 401) {
-                    if (errorMessages.includes("아이디")) {
-                        Errors.loginIdError = errorMessages;
-                    }
-                    if (errorMessages.includes("비밀번호")) {
-                        Errors.checkPasswordError = errorMessages;
-                    }
+                    errors = handleError(errorMessages)
                 }
 
                 //유효성 검증이 실패한 경우
                 if (err.response?.status === 400) {
-                    errorMessages.forEach(element => {
-                        if (element.includes("아이디")) {
-                            Errors.loginIdError = element;
-                        }
-                        if (element.includes("비밀번호")) {
-                            if (e.target.password.value === "" && element.includes("필수")) {
-                                Errors.passwordError = element;
-                            }
-
-                            if (e.target.password.value !== "" && element.includes("형식")) {
-                                Errors.passwordError = element;
-                            }
-                        }
-                        if (element.includes("비밀번호") && element.includes("재입력")) {
-                            Errors.checkPasswordError = element;
-                        }
-                        if (element.includes("이름")) {
-                            Errors.nameError = element;
-                        }
-                        if (element.includes("이메일")) {
-                            if (e.target.email.value === "" && element.includes("필수")) {
-                                Errors.emailError = element;
-                            }
-
-                            if (e.target.email.value !== "" && element.includes("형식")) {
-                                Errors.emailError = element;
-                            }
-                        }
-                    });
+                    errors = handleValidationError(errorMessages, isPasswordEmpty, isEmailEmpty);
                 }
 
-                setErrors(prev => ({ ...prev, ...Errors }));
+                setErrors(prev => ({ ...prev, ...errors }));
             }))
 
     };
