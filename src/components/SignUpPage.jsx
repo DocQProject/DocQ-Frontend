@@ -2,30 +2,25 @@ import { useState } from "react";
 import { fetchCheckLoginIdAvailability, fetchSignUp } from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 import CheckBox from "./common/CheckBox";
+import FormInput from "./common/FormInput";
 
-function SignUpFormData({ name, value, type, inputPlaceholder, check = false, checkLoginId, setCheckLoginId, error, setErrors, showPassword, setShowPassword }) {
+function SignUpFormData({ name, value, type, inputPlaceholder, check = false, setErrors, error, showPassword, setShowPassword }) {
     const [loginId, setLoginId] = useState("")
+    const [checkLoginId, setCheckLoginId] = useState(false)
     const isError = error !== ""
-    const button = check ?
-        <button
-            type="button"
-            className="text-white bg-black rounded ml-3 px-3 py-2"
-            onClick={() => handleCheckLoginId(loginId, setCheckLoginId, setErrors)}
-        >
-            중복확인
-        </button> : null;
 
     return (
         <>
             <div className="mb-6">
                 <div className="flex items-center">
-                    <label className="w-36 text-left mr-4">{value}</label>
-                    <input
+                    <FormInput
+                        label={value}
                         type={showPassword ? "text" : type}
+                        value={check ? loginId : undefined}
                         name={name}
-                        onChange={check ? (e) => setLoginId(e.target.value) : null}
                         placeholder={inputPlaceholder}
-                        className="pl-5 pr-5 py-2 border border-gray-300 rounded w-80"
+                        setInfo={check ? setLoginId : undefined}
+                        isLoginInput={false}
                     />
                     {
                         type === "password" && name === "password" ?
@@ -35,17 +30,38 @@ function SignUpFormData({ name, value, type, inputPlaceholder, check = false, ch
                                 setShow={setShowPassword}
                             /> : null
                     }
-                    {button}
+                    {
+                        check ?
+                            <Button
+                                name="중복 확인"
+                                loginId={loginId}
+                                setCheckLoginId={setCheckLoginId}
+                                setErrors={setErrors}
+                            />
+                            : null
+                    }
                 </div>
                 {
                     isError || checkLoginId ?
                         <FieldMessage
-                            value={isError ? error: "사용 가능한 아이디 입니다."}
+                            value={isError ? error : "사용 가능한 아이디 입니다."}
                             isSuccess={isError ? false : true}
                         /> : null
                 }
             </div>
         </>
+    );
+}
+
+function Button({ name, loginId, setCheckLoginId, setErrors }) {
+    return (
+        <button
+            type="button"
+            className="text-white bg-black rounded ml-3 px-3 py-2"
+            onClick={() => handleCheckLoginId(loginId, setCheckLoginId, setErrors)}
+        >
+            {name}
+        </button>
     );
 }
 
@@ -121,7 +137,6 @@ function handleValidationError(errorMessages, isPasswordEmpty, isEmailEmpty) {
 }
 
 function SignUpPage() {
-    const [checkLoginId, setCheckLoginId] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const initialErrors = {
@@ -207,8 +222,6 @@ function SignUpPage() {
                                     type="text"
                                     inputPlaceholder="아이디를 입력해주세요."
                                     check={true}
-                                    checkLoginId={checkLoginId}
-                                    setCheckLoginId={setCheckLoginId}
                                     error={errors.loginIdError}
                                     setErrors={setErrors}
                                 />

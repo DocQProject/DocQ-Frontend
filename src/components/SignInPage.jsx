@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchSignIn } from "../api";
 import { useNavigate } from "react-router-dom";
 import CheckBox from "./common/CheckBox";
+import FormInput from "./common/FormInput";
 
 function FieldErrorMessage({ value }) {
     return (
@@ -27,25 +28,22 @@ function SignInField({ baseField, showPassword, setShowPassword, setSignInInfo }
     return (
         <div className="flex flex-col">
             <div className="flex items-center mb-5">
-                <label className="w-24 text-left mr-4">{baseField.label}</label>
-                <input
+                <FormInput
+                    label={baseField.label}
                     name={baseField.name}
-                    type={isPassword && showPassword ? "text" :baseField.type}
+                    type={isPassword && showPassword ? "text" : baseField.type}
                     value={baseField.value}
                     placeholder={baseField.placeholder}
-                    className="pl-5 pr-5 py-2 border border-gray-300 rounded w-80 flex flex-col"
-                    onChange={e => setSignInInfo(info => ({
-                        ...info,
-                        [e.target.name]: e.target.value,
-                    }))}
+                    setInfo={setSignInInfo}
+                    isLoginInput={true}
                 />
                 {
-                    isPassword ? 
-                    <CheckBox 
-                        boxName="비밀번호 보기" 
-                        show={showPassword}
-                        setShow={setShowPassword}
-                    /> : null
+                    isPassword ?
+                        <CheckBox
+                            boxName="비밀번호 보기"
+                            show={showPassword}
+                            setShow={setShowPassword}
+                        /> : null
                 }
             </div>
             {/* 경고 문자 표시 부분 */}
@@ -69,7 +67,7 @@ function SignInPage() {
 
     const fields = [
         { name: "loginId", label: "아이디", type: "text", value: signInInfo.loginId, placeholder: "아이디를 입력해주세요.", error: errors.loginIdError },
-        { name: "password", label: "비밀번호", type: "password",value: signInInfo.password, placeholder: "비밀번호를 입력해주세요.", error: errors.passwordError }
+        { name: "password", label: "비밀번호", type: "password", value: signInInfo.password, placeholder: "비밀번호를 입력해주세요.", error: errors.passwordError }
     ];
 
     //로그인 폼 제출 
@@ -78,35 +76,35 @@ function SignInPage() {
 
         setErrors({ loginIdError: "", passwordError: "" });
         fetchSignIn(signInInfo)
-        .then((res) => {
-            localStorage.setItem("accessToken", res.data.token.trim()),
-            setErrors({ loginIdError: "", passwordError: "", globalError: "" }),
-            navigate("/");
-        })
-        .catch(err => {
-            const errorMessages = err.response?.data;
-            const Errors = {};
+            .then((res) => {
+                localStorage.setItem("accessToken", res.data.token.trim()),
+                    setErrors({ loginIdError: "", passwordError: "", globalError: "" }),
+                    navigate("/");
+            })
+            .catch(err => {
+                const errorMessages = err.response?.data;
+                const Errors = {};
 
-            //잘못된 로그인 정보를 입력한 경우
-            if (err.response?.status === 404 || err.response?.status === 401) {
-                Errors.globalError = "아이디 혹은 비밀번호가 일치하지 않습니다.";
-            }
+                //잘못된 로그인 정보를 입력한 경우
+                if (err.response?.status === 404 || err.response?.status === 401) {
+                    Errors.globalError = "아이디 혹은 비밀번호가 일치하지 않습니다.";
+                }
 
-            //유효성 검증이 실패한 경우
-            if (err.response?.status === 400) {
+                //유효성 검증이 실패한 경우
+                if (err.response?.status === 400) {
 
-                errorMessages.forEach(element => {
-                    if (element.includes("아이디")) {
-                        Errors.loginIdError = element;
-                    }
-                    if (element.includes("비밀번호")) {
-                        Errors.passwordError = element;
-                    }
-                });
-            }
+                    errorMessages.forEach(element => {
+                        if (element.includes("아이디")) {
+                            Errors.loginIdError = element;
+                        }
+                        if (element.includes("비밀번호")) {
+                            Errors.passwordError = element;
+                        }
+                    });
+                }
 
-            setErrors(prev => ({ ...prev, ...Errors }));
-        })
+                setErrors(prev => ({ ...prev, ...Errors }));
+            })
     }
 
     //비밀번호 초기화 (에러가 발생한 경우)
