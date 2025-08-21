@@ -9,7 +9,7 @@ import ReviewPage from './components/ReviewPage'
 import ClinicPage from './components/ClinicPage'
 import MyPage from './components/MyPage'
 import Board from './components/Board'
-import NavigationBar from './components/NavigationBar'
+import NavigationBar from './components/common/NavigationBar'
 
 
 function AppContent() {

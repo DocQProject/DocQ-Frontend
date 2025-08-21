@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchSignIn } from "../api";
 import { useNavigate } from "react-router-dom";
+import CheckBox from "./common/CheckBox";
 
 function FieldErrorMessage({ value }) {
     return (
@@ -38,18 +39,13 @@ function SignInField({ baseField, showPassword, setShowPassword, setSignInInfo }
                         [e.target.name]: e.target.value,
                     }))}
                 />
-                {/* 체크 박스 표시 부분 */}
                 {
-                    isPassword ?
-                        <label className="flex items-center mx-5">
-                            <input
-                                type="checkbox"
-                                className="mx-2"
-                                checked={showPassword}
-                                onChange={(e) => setShowPassword(e.target.checked)}
-                            />
-                            비밀번호 보기
-                        </label> : null
+                    isPassword ? 
+                    <CheckBox 
+                        boxName="비밀번호 보기" 
+                        show={showPassword}
+                        setShow={setShowPassword}
+                    /> : null
                 }
             </div>
             {/* 경고 문자 표시 부분 */}

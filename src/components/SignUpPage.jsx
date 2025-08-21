@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { fetchCheckLoginIdAvailability, fetchSignUp } from "../api";
 import { useNavigate } from "react-router-dom";
+import CheckBox from "./common/CheckBox";
 
 function FieldErrorMessage({ value }) {
     return (
@@ -10,7 +11,7 @@ function FieldErrorMessage({ value }) {
     );
 }
 
-function SuccessLoginIdMessage ({ value }) {
+function SuccessLoginIdMessage({ value }) {
     return (
         <p
             className="font-bold text-top text-xs text-green-600 mt-5 ml-40 "
@@ -55,24 +56,20 @@ function SignUpFormData({ name, value, type, inputPlaceholder, check = false, ch
                 <div className="flex items-center">
                     <label className="w-36 text-left mr-4">{value}</label>
                     <input
-                        type={showPassword ? "text": type}
+                        type={showPassword ? "text" : type}
                         name={name}
                         onChange={check ? (e) => setLoginId(e.target.value) : null}
                         placeholder={inputPlaceholder}
                         className="pl-5 pr-5 py-2 border border-gray-300 rounded w-80"
                     />
                     {
-                        type === "password" && name === "password"?
-                            <label className="flex items-center mx-5">
-                            <input
-                                type="checkbox"
-                                className="mx-2"
-                                checked={showPassword}
-                                onChange={(e) => setShowPassword(e.target.checked)}
-                            />
-                            비밀번호 보기
-                        </label> : null
-                    } 
+                        type === "password" && name === "password" ?
+                            <CheckBox
+                                boxName="비밀번호 보기"
+                                show={showPassword}
+                                setShow={setShowPassword}
+                            /> : null
+                    }
                     {button}
                 </div>
                 {
@@ -83,7 +80,7 @@ function SignUpFormData({ name, value, type, inputPlaceholder, check = false, ch
                 }
                 {
                     checkLoginId ?
-                        <SuccessLoginIdMessage  
+                        <SuccessLoginIdMessage
                             value="사용 가능한 아이디입니다."
                         /> : null
                 }
@@ -145,7 +142,7 @@ function SignUpPage() {
 
                 //잘못된 정보를 입력한 경우
                 if (err.response?.status === 409 || err.response?.status === 401) {
-                    if (errorMessages.includes("아이디")){
+                    if (errorMessages.includes("아이디")) {
                         Errors.loginIdError = errorMessages;
                     }
                     if (errorMessages.includes("비밀번호")) {
