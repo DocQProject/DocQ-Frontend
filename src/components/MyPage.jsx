@@ -76,41 +76,44 @@ function ProfileSection({ user, onUserUpdate }) {
 
   const handleEditClick = () => {
     if (isEditable) {
-      try {
-        updateUserInfo(formData);
-        alert("정보가 업데이트되었습니다.");
-        if (onUserUpdate) {
-          onUserUpdate(formData);
-        }
-        setIsEditable(false);
-        setErrorMessages({});
-      } catch (error) {
-        console.error("Error updating user info:", error);
-        const errorMessage = error.response?.data;
-
-        if (Array.isArray(errorMessage)) {
-          const errors = {};
-          errorMessage.forEach((err) => {
-            if (err.includes("아이디")) {
-              errors.loginId = err;
-            } else if (err.includes("이름")) {
-              errors.name = err;
-            } else if (err.includes("비밀번호")) {
-              errors.password = err;
-            } else if (err.includes("이메일")) {
-              errors.email = err;
-            }
-          });
-
-          setErrorMessages(errors);
-        } else if (typeof errorMessage === "string") {
-          if (errorMessage.includes("이미")) {
-            setErrorMessages({ loginId: errorMessage });
+      updateUserInfo(formData)
+        .then(() => {
+          alert("정보가 업데이트되었습니다.");
+          if (onUserUpdate) {
+            onUserUpdate(formData);
           }
-        } else {
-          alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-        }
-      }
+          setIsEditable(false);
+          setErrorMessages({});
+        })
+        .catch((error) => {
+          console.error("Error updating user info:", error);
+          const errorMessage = error.response?.data;
+
+          if (Array.isArray(errorMessage)) {
+            const errors = {};
+            errorMessage.forEach((err) => {
+              if (err.includes("아이디")) {
+                errors.loginId = err;
+              } else if (err.includes("이름")) {
+                errors.name = err;
+              } else if (err.includes("비밀번호")) {
+                errors.password = err;
+              } else if (err.includes("이메일")) {
+                errors.email = err;
+              }
+            });
+            setErrorMessages(errors);
+          } else if (error.response?.status === 409) {
+            if (
+              typeof errorMessage === "string" &&
+              errorMessage.includes("이미")
+            ) {
+              setErrorMessages({ loginId: errorMessage });
+            }
+          } else {
+            alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+          }
+        });
     } else {
       setIsEditable(true);
     }
@@ -199,7 +202,7 @@ function ReservationCard({ clinic, date, time, message, isDeleted }) {
   );
 }
 
-function ClinicSection( {clinic, onClinicUpdate} ) {
+function ClinicSection({ clinic, onClinicUpdate }) {
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -237,7 +240,7 @@ function ClinicSection( {clinic, onClinicUpdate} ) {
   const handleRegisterClinic = (e) => {
     e.preventDefault();
 
-      registerMyClinic(formData)
+    registerMyClinic(formData)
       .then(() => {
         alert("병원이 등록되었습니다.");
         if (onClinicUpdate) {
@@ -469,7 +472,7 @@ function MyPage() {
       case "내 정보":
         return <ProfileSection user={user} onUserUpdate={setUser} />;
       case "내 병원":
-        return <ClinicSection clinic={clinic} onClinicUpdate={setClinic}/>;
+        return <ClinicSection clinic={clinic} onClinicUpdate={setClinic} />;
       case "내 예약":
         return <ReservationSection reservations={reservations} />;
       case "회원탈퇴":
