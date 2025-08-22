@@ -74,10 +74,10 @@ function ProfileSection({ user, onUserUpdate }) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleEditClick = async () => {
+  const handleEditClick = () => {
     if (isEditable) {
       try {
-        await updateUserInfo(formData);
+        updateUserInfo(formData);
         alert("정보가 업데이트되었습니다.");
         if (onUserUpdate) {
           onUserUpdate(formData);
@@ -188,13 +188,13 @@ function ReservationSection({ reservations }) {
 function ReservationCard({ clinic, date, time, message, isDeleted }) {
   return (
     <div className="border rounded-lg p-4 shadow-sm flex flex-col gap-2 bg-gray-50 mb-4">
-      <div className="text-lg font-bold">{clinic}</div>
-      <div className="text-sm text-gray-600">예약일: {date}</div>
-      <div className="text-sm text-gray-600">시간: {time}</div>
-      <div className="text-sm text-gray-600">코멘트: {message}</div>
-      <div className="text-sm font-semibold text-blue-600">
+      <h2 className="text-lg font-bold">{clinic}</h2>
+      <p className="text-sm text-gray-600">예약일: {date}</p>
+      <p className="text-sm text-gray-600">시간: {time}</p>
+      <p className="text-sm text-gray-600">코멘트: {message}</p>
+      <p className="text-sm font-semibold text-blue-600">
         예약현황: {isDeleted ? "취소" : "예약완료"}
-      </div>
+      </p>
     </div>
   );
 }
@@ -234,10 +234,10 @@ function ClinicSection( {clinic, onClinicUpdate} ) {
     loadClinicData();
   }, []);
 
-  const handleRegisterClinic = async (e) => {
+  const handleRegisterClinic = (e) => {
     e.preventDefault();
 
-    await registerMyClinic(formData)
+      registerMyClinic(formData)
       .then(() => {
         alert("병원이 등록되었습니다.");
         if (onClinicUpdate) {
@@ -366,7 +366,7 @@ function DeleteAccountSection({}) {
   const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (!password) {
       setError("비밀번호를 입력해주세요.");
       return;
@@ -383,7 +383,7 @@ function DeleteAccountSection({}) {
 
     try {
       // 예시 API 호출
-      await deleteAccount({ password });
+      deleteAccount({ password });
       alert("회원탈퇴가 완료되었습니다.");
 
       localStorage.removeItem("accessToken");
