@@ -29,11 +29,11 @@ export function fetchDepartments() {
 
 export function fetchPosts() {
     const token = localStorage.getItem("accessToken")?.trim();
-    
+
     return api.get(
         "/posts",
         {
-            params : {
+            params: {
                 "sort": "createdAt,desc"
             },
             headers: {
@@ -43,13 +43,31 @@ export function fetchPosts() {
     )
 }
 
+export function fetchSignUp(signUpInfo) {
+
+    return api.post(
+        "/auth/sign-up",
+        signUpInfo,
+    )
+}
+
+export function fetchCheckLoginIdAvailability(loginId) {
+
+    return api.post(
+        "/auth/check/loginId",
+        {
+            "loginId": `${loginId}`
+        }
+    )
+}
+
 export function fetchSearchClinicByQuery(keyword, currentPage) {
     const token = localStorage.getItem("accessToken")?.trim();
-    
+
     return api.get(
         "/search",
         {
-            params : {
+            params: {
                 "q": `${keyword}`,
                 "page": `${currentPage}`
             },

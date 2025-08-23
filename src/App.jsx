@@ -9,11 +9,11 @@ import ReviewPage from './components/ReviewPage'
 import ClinicPage from './components/ClinicPage'
 import MyPage from './components/MyPage'
 import Board from './components/Board'
-import NavigationBar from './components/NavigationBar'
+import NavigationBar from './components/common/NavigationBar'
 
 
 function AppContent() {
-  const navigationBarHiddenUrl = ["/sign-up", "/sign-in"]
+  const navigationBarHiddenUrl = ["/sign-up", "/sign-in", "/sign-up/doctor"]
   const location = useLocation();
 
   return (
@@ -22,6 +22,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/sign-up/doctor" element={<SignUpPage />} />
         <Route path="/sign-up/doctor" element={<SignUpPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/search" element={<ClinicSearchPage />} />

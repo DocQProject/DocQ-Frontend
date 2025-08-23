@@ -1,7 +1,8 @@
+
 import { useEffect, useState } from 'react';
-import { Pagination } from './Pagenation';
 import { useSearchParams  } from 'react-router-dom';
 import { fetchSearchClinicByQuery } from '../api';
+import { Pagination } from './common/Pagenation';
 
 function ClinicData({ name, address, department, open, close, starPoint }) {
     return (
