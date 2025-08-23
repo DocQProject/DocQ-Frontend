@@ -195,7 +195,7 @@ function SignUpPage() {
             {/* 회원가입 폼 */}
             <div className="flex justify-center h-screen w-screen mx-auto my-auto py-10">
                 <div className="flex flex-col items-center">
-                    <h1 className="font-bold text-5xl">회원가입</h1>
+                    <h1 className="font-bold text-5xl"> {role === "ROLE_DOCTOR" ? "의료진 회원가입" : "회원가입"}</h1>
                     <div className="mt-10 shadow-md rounded-lg p-15 ">
                         <form
                             className="flex flex-col items-left"

@@ -152,13 +152,21 @@ function SignInPage() {
                     </div>
 
                     <div className="w-full text-center border-b border-gray-300 my-10" />
-
-                    <button
-                        className="text-white bg-black px-4 py-4 rounded"
-                        onClick={() => navigate("/sign-up")}
-                    >
-                        회원가입 하러가기
-                    </button>
+ 
+                    <div className="w-full flex flex-row justify-center items-center gap-5">
+                        <button
+                            className="text-white bg-black px-4 py-4 rounded"
+                            onClick={() => navigate("/sign-up")}
+                        >
+                            일반 유저 회원가입 하러가기
+                        </button>
+                        <button
+                            className="text-white bg-black px-4 py-4 rounded"
+                            onClick={() => navigate("/sign-up/doctor")}
+                        >
+                            의료진 회원가입 하러가기
+                        </button>
+                    </div>
                 </div>
             </div>
         </>
