@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideBar from "./SideBar";
+import { useParams } from "react-router-dom";
+import { fetchClinicInfo } from "../api";
 
 function ReservationForm() {
   return (
@@ -111,6 +113,24 @@ function ReservationForm() {
 function ClinicPage() {
   const sectionMenus = ["정보", "리뷰", "예약"]
   const [activeSection, setActiveSection] = useState(sectionMenus[0]);
+  const [clinicData, setClinicData] = useState([]);
+  const clinicParam = useParams();
+
+  useEffect(() => {
+    fetchClinicInfo(clinicParam.id)
+      .then((res) => {
+        console.log(res.data.reviews)
+        setClinicData(res.data)
+      }
+      )
+      .catch((err) => {
+        console.log()
+        console.log("Error details:", err);
+        console.log("Error response:", err.response);
+        console.log("Clinic ID:", clinicParam.id);
+        alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+      });
+  }, [clinicParam.id]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -120,19 +140,10 @@ function ClinicPage() {
             <h3 className="text-xl font-semibold mb-4">병원 정보</h3>
             <div className="space-y-3 text-gray-700">
               <p>
-                <strong>진료시간:</strong> 10:00 - 20:00
+                <strong>진료시간:</strong> {clinicData.openTime} - {clinicData.closeTime}
               </p>
               <p>
-                <strong>휴게시간:</strong> 12:00 - 14:00
-              </p>
-              <p>
-                <strong>휴무일:</strong> 일요일, 공휴일
-              </p>
-              <p>
-                <strong>전화번호:</strong> 02-1234-5678
-              </p>
-              <p>
-                <strong>주소:</strong> 서울시 강남구 테헤란로 123
+                <strong>주소:</strong> {clinicData.address}
               </p>
             </div>
           </div>
@@ -140,27 +151,36 @@ function ClinicPage() {
       case "리뷰":
         return (
           <div className="p-6 bg-gray-50 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">환자 리뷰</h3>
-            <div className="space-y-4">
-              <div className="border-b pb-4">
-                <div className="flex items-center mb-2">
-                  <span className="text-yellow-500">★★★★★</span>
-                  <span className="ml-2 text-sm text-gray-600">김○○</span>
-                </div>
-                <p className="text-gray-700">
-                  친절하고 정확한 진료 받았습니다. 추천해요!
-                </p>
-              </div>
-              <div className="border-b pb-4">
-                <div className="flex items-center mb-2">
-                  <span className="text-yellow-500">★★★★☆</span>
-                  <span className="ml-2 text-sm text-gray-600">박○○</span>
-                </div>
-                <p className="text-gray-700">
-                  대기시간이 조금 길었지만 의료진이 매우 친절했습니다.
-                </p>
-              </div>
-            </div>
+            {
+              clinicData.reviews.page.totalElements === 0 ?
+                <>
+                  <h3 className="text-xl font-semibold mb-4">환자 리뷰</h3>
+                  <p className="font-bold">리뷰가 존재하지 않습니다. </p>
+                </> :
+                <>
+                  <h3 className="text-xl font-semibold mb-4">환자 리뷰: {clinicData.reviews.page.totalElements}</h3>
+                  <div className="space-y-4">
+                    <div className="border-b pb-4">
+                      <div className="flex items-center mb-2">
+                        <span className="text-yellow-500">★★★★★</span>
+                        <span className="ml-2 text-sm text-gray-600">김○○</span>
+                      </div>
+                      <p className="text-gray-700">
+                        친절하고 정확한 진료 받았습니다. 추천해요!
+                      </p>
+                    </div>
+                    <div className="border-b pb-4">
+                      <div className="flex items-center mb-2">
+                        <span className="text-yellow-500">★★★★☆</span>
+                        <span className="ml-2 text-sm text-gray-600">박○○</span>
+                      </div>
+                      <p className="text-gray-700">
+                        대기시간이 조금 길었지만 의료진이 매우 친절했습니다.
+                      </p>
+                    </div>
+                  </div>
+                </>
+            }
           </div>
         );
       case "예약":
@@ -173,7 +193,7 @@ function ClinicPage() {
   return (
     <div className="w-full max-w-[60%] mx-auto flex-1 pt-[10rem] pb-[2rem]">
       <div className="grid grid-cols-1 sm:grid-cols-2 mb-6">
-        <h1 className="font-bold text-4xl sm:text-5xl">서울 병원</h1>
+        <h1 className="font-bold text-4xl sm:text-5xl">{clinicData.name}</h1>
       </div>
 
       {/* 구분선 */}

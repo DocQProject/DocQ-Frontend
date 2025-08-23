@@ -29,7 +29,7 @@ export function fetchDepartments() {
 
 export function fetchPosts() {
     const token = localStorage.getItem("accessToken")?.trim();
-    
+
     return api.get(
         "/posts",
         {
@@ -45,7 +45,7 @@ export function fetchPosts() {
 
 export function fetchSearchClinicByQuery(keyword, currentPage) {
     const token = localStorage.getItem("accessToken")?.trim();
-    
+
     return api.get(
         "/search",
         {
@@ -66,8 +66,8 @@ export function fetchSearchClinicByQuery(keyword, currentPage) {
 export function fetchUserInfo() {
     const token = localStorage.getItem("accessToken").trim();
     return api.get('/users/me',
-                {
-            headers: { 
+        {
+            headers: {
                 "Authorization": `Bearer ${token}`
             }
         },
@@ -77,7 +77,7 @@ export function fetchUserInfo() {
 export const updateUserInfo = (formData) => {
     const token = localStorage.getItem("accessToken").trim();
     return api.patch('/users/profile', formData, {
-        headers: { 
+        headers: {
             "Authorization": `Bearer ${token}`
         }
     });
@@ -87,7 +87,7 @@ export const updateUserInfo = (formData) => {
 export const fetchReservations = () => {
     const token = localStorage.getItem("accessToken").trim();
     return api.get('/reservations/me', {
-        headers: { 
+        headers: {
             "Authorization": `Bearer ${token}`
         }
     });
@@ -97,7 +97,7 @@ export const fetchReservations = () => {
 export const fetchMyClinicInfo = () => {
     const token = localStorage.getItem("accessToken").trim();
     return api.get('/clinics/my-clinic', {
-        headers: { 
+        headers: {
             "Authorization": `Bearer ${token}`
         }
     });
@@ -106,16 +106,16 @@ export const fetchMyClinicInfo = () => {
 export const registerMyClinic = (clinicData) => {
     const token = localStorage.getItem("accessToken").trim();
     return api.post('/clinics', clinicData, {
-        headers: { 
+        headers: {
             "Authorization": `Bearer ${token}`
         }
     })
 }
 
-export const deleteClinic = () => { 
+export const deleteClinic = () => {
     const token = localStorage.getItem("accessToken").trim();
     return api.delete('/clinics/my-clinic', {
-        headers: { 
+        headers: {
             "Authorization": `Bearer ${token}`
         }
     });
@@ -125,9 +125,22 @@ export const deleteClinic = () => {
 export const deleteAccount = (password) => {
     const token = localStorage.getItem("accessToken").trim();
     return api.delete('/users', {
-        headers: { 
+        headers: {
             "Authorization": `Bearer ${token}`
         },
         data: password
     });
+}
+
+export function fetchClinicInfo(clinicId) {
+    const token = localStorage.getItem("accessToken").trim();
+
+    return api.get(
+        `/clinics/${clinicId}`,
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+        }
+    )
 }
