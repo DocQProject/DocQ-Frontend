@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SideBar from "./SideBar";
 
 function ReservationForm() {
   return (
@@ -107,8 +108,9 @@ function ReservationForm() {
   );
 }
 
-function ReservationPage() {
-  const [activeSection, setActiveSection] = useState("정보");
+function ClinicPage() {
+  const sectionMenus = ["정보", "리뷰", "예약"]
+  const [activeSection, setActiveSection] = useState(sectionMenus[0]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -169,7 +171,7 @@ function ReservationPage() {
   };
 
   return (
-    <div className="w-full max-w-[60%] mx-auto min-h-screen p-6">
+    <div className="w-full max-w-[60%] mx-auto flex-1 pt-[10rem] pb-[2rem]">
       <div className="grid grid-cols-1 sm:grid-cols-2 mb-6">
         <h1 className="font-bold text-4xl sm:text-5xl">서울 병원</h1>
       </div>
@@ -179,27 +181,17 @@ function ReservationPage() {
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* 사이드바 */}
-        <aside className="max-w-[20%] lg:w-64 flex-shrink-0 flex flex-col gap-6">
-          {["정보", "리뷰", "예약"].map((section) => (
-            <button
-              key={section}
-              onClick={() => setActiveSection(section)}
-              className={`text-2xl font-semibold text-left transition-colors ${
-                activeSection === section
-                  ? "text-blue-600 border-l-4 border-blue-600 pl-4"
-                  : "text-gray-700 hover:text-blue-600 pl-4"
-              }`}
-            >
-              {section}
-            </button>
-          ))}
-        </aside>
+        <SideBar
+          menus={sectionMenus}
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+        />
 
         {/* 메인 콘텐츠 */}
-        <div className="flex-1">{renderContent()}</div>
+        <div className="flex-1 px-5">{renderContent()}</div>
       </div>
     </div>
   );
 }
 
-export default ReservationPage;
+export default ClinicPage;
