@@ -28,6 +28,14 @@ export function Pagination({
         );
     }
 
+    //총 페이지가 0일 경우 버튼 표시 X
+    if (totalPages === 0) {
+        return (
+            <>
+            </>
+        );
+    }
+
     return (
         <div className="flex w-full mx-auto justify-center">
             <button className="text-white bg-black px-4 py-2 rounded" onClick={goToPrevPage} disabled={currentPage === 0}>

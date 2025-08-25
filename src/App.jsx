@@ -29,7 +29,7 @@ function AppContent() {
         <Route path="/review" element={<ReviewPage />} />
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/board' element={<Board />} />
-        <Route path="/clinic" element={<ClinicPage />} />
+        <Route path="/clinic/:id" element={<ClinicPage />} />
       </Routes>
     </>
   );
