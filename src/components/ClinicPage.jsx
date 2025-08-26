@@ -110,6 +110,30 @@ function ReservationForm() {
   );
 }
 
+function ReviewForm({ author, content, imageURLs, createdAt }) {
+  return (
+    <div className="pb-4 shadow-md rounded-lg px-5 py-3">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center">
+          <span className="text-yellow-500">★★★★★</span>
+          <span className="ml-2 text-sm text-gray-600">{author}</span>
+        </div>
+        <span className="text-xs text-gray-400">{createdAt}</span>
+      </div>
+      <div className="flex flex-row gap-4 py-5">
+        {
+          imageURLs.map((image, index) => (
+            <img 
+              key={index}
+              src={image}></img>
+          ))  
+        }
+      </div>
+      <p className="text-gray-700">{content}</p>
+    </div>
+  );
+}
+
 function ClinicPage() {
   const sectionMenus = ["정보", "리뷰", "예약"]
   const [activeSection, setActiveSection] = useState(sectionMenus[0]);
@@ -160,24 +184,17 @@ function ClinicPage() {
                 <>
                   <h3 className="text-xl font-semibold mb-4">환자 리뷰: {clinicData.reviews.page.totalElements}</h3>
                   <div className="space-y-4">
-                    <div className="border-b pb-4">
-                      <div className="flex items-center mb-2">
-                        <span className="text-yellow-500">★★★★★</span>
-                        <span className="ml-2 text-sm text-gray-600">김○○</span>
-                      </div>
-                      <p className="text-gray-700">
-                        친절하고 정확한 진료 받았습니다. 추천해요!
-                      </p>
-                    </div>
-                    <div className="border-b pb-4">
-                      <div className="flex items-center mb-2">
-                        <span className="text-yellow-500">★★★★☆</span>
-                        <span className="ml-2 text-sm text-gray-600">박○○</span>
-                      </div>
-                      <p className="text-gray-700">
-                        대기시간이 조금 길었지만 의료진이 매우 친절했습니다.
-                      </p>
-                    </div>
+                    {
+                      clinicData.reviews.content.map((review, index) => (
+                        <ReviewForm
+                          key={index}
+                          author={review.author}
+                          content={review.content}
+                          imageURLs={review.imageURLs}
+                          createdAt={review.createdAt}
+                        />
+                      ))
+                    }
                   </div>
                 </>
             }
