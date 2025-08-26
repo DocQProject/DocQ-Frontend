@@ -162,3 +162,19 @@ export function fetchClinicInfo(clinicId) {
         }
     )
 }
+
+export function fetchReview(page, clinicParam) {
+    const token = localStorage.getItem("accessToken").trim();
+
+    return api.get(
+        `/clinics/${clinicParam.id}/reviews`,
+        {
+            params: {
+                "page": page
+            },
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+        }
+    )
+}
