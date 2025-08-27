@@ -117,7 +117,7 @@ function ReviewForm({ author, content, imageURLs, createdAt, rating }) {
       </div>
       <div className="flex flex-row gap-4 py-5">
         {imageURLs.map((image, index) => (
-          <img key={index} src={image || "/placeholder.svg"}></img>
+          <img key={index} src={image || "/placeholder.svg"} className="w-50 h-50 object-cover rounded"></img>
         ))}
       </div>
       <p className="text-gray-700">{content}</p>

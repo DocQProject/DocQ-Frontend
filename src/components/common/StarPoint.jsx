@@ -19,10 +19,8 @@ export function StarRatingInput({ setClickedStarNum }) {
             star[i] = i <= score ? true : false;
         }
         setClicked(star);
-        setClickedStarNum(score + 1);
+        setClickedStarNum(score);
     }
-
-    let clickedStarNum = clicked.filter(element => true === element).length;
 
     return (
         <div className="flex justify-center items-center">

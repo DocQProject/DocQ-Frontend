@@ -195,3 +195,21 @@ export function fetchCreateReview(clickedStarNum, reviewContent, clinicId) {
         }
     )
 }
+
+export function fetchCreateImage(file, reviewId) {
+    const token = localStorage.getItem("accessToken").trim();
+
+    const formData = new FormData();
+    formData.append("file", file);  // file 넣기
+
+    return api.post(
+        `/images/${reviewId}?referenceType=REVIEW`,
+        formData,
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        }
+    )
+}
