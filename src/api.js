@@ -178,3 +178,20 @@ export function fetchReview(page, clinicParam) {
         }
     )
 }
+
+export function fetchCreateReview(clickedStarNum, reviewContent, clinicId) {
+    const token = localStorage.getItem("accessToken").trim();
+
+    return api.post(
+        `/clinics/${clinicId}/reviews`,
+        {
+            content: reviewContent,
+            starPoint: clickedStarNum
+        },
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }
+    )
+}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import SideBar from "./SideBar"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { fetchClinicInfo, fetchReview } from "../api"
 import { StarRatingDisplay } from "./common/StarPoint"
 import { useInfiniteQuery } from "@tanstack/react-query"
@@ -132,7 +132,7 @@ function ClinicPage() {
   const clinicParam = useParams()
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, error } = useInfiniteQuery({
     queryKey: ["reviews", clinicParam.id],
-    queryFn: ({pageParam}) => fetchReview(pageParam, clinicParam),
+    queryFn: ({ pageParam }) => fetchReview(pageParam, clinicParam),
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = lastPage.data.page.number + 1
       return nextPage <= lastPage.data.page.totalPages ? nextPage : undefined
@@ -140,6 +140,7 @@ function ClinicPage() {
     initialPageParam: 0,
   })
   const { ref, inView } = useInView()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -189,7 +190,13 @@ function ClinicPage() {
               </>
             ) : (
               <>
-                <h3 className="text-xl font-semibold mb-4">환자 리뷰: {data?.pages[0]?.data?.page?.totalElements}</h3>
+                <div className="flex flex-row">
+                  <h3 className="text-xl font-semibold mb-4">환자 리뷰: {data?.pages[0]?.data?.page?.totalElements}</h3>
+                  <button 
+                    className="text-white ml-auto bg-black px-4 rounded"
+                    onClick={() => navigate("/review", {state: {clinicId: clinicParam.id}})}
+                  > 리뷰 작성하기</button>
+                </div>
                 <div className="space-y-4">
                   {data?.pages
                     ?.flatMap((page) => page.data.content)
