@@ -7,18 +7,32 @@ function ImageUpload({ imgPath, setImgPath }) {
     function addImage(e) {
         const files = Array.from(e.target.files);
         setImgPath(prev => [...prev, ...files]);
+
+        e.target.value = "";
+    }
+
+    function handleDeleteImage(index) {
+        setImgPath(prev => prev.filter((file, i) => i !== index));
     }
 
     return (
         <div className="flex flex-row mt-10 gap-3">
             {
                 imgPath.map((file, index) => (
-                    <img
-                        key={index}
-                        src={URL.createObjectURL(file)}
-                        alt="사진"
-                        className="w-30 h-30 object-cover rounded"
-                    />
+                    <div key={index} className="relative">
+                        <img
+                            src={URL.createObjectURL(file)}
+                            alt="사진"
+                            className="w-30 h-30 object-cover rounded cursor-pointer"
+                        />
+                        <button
+                            type="button"
+                            className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1"
+                            onClick={() => handleDeleteImage(index)}
+                        >
+                            X
+                        </button>
+                    </div>
                 ))
             }
             <label
