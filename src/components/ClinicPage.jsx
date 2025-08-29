@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import SideBar from "./SideBar";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchClinicInfo, fetchReview, fetchAvailableTimes } from "../api";
+import { fetchClinicInfo, fetchReview, fetchAvailableTimes, createReservation } from "../api";
 import { StarRatingDisplay } from "./common/StarPoint";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
@@ -11,19 +11,17 @@ function ReservationForm({ clinicId, openTime, closeTime }) {
   const [slots, setSlots] = useState([]);
   const [availableTimes, setAvailableTimes] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [message, setMessage] = useState("");
 
-  // 30분 단위 슬롯 생성
+  // 슬롯 생성
   function generateTimeSlots(start, end) {
     const slots = [];
     let [hour, minute] = start.split(":").map(Number);
     const [endHour, endMinute] = end.split(":").map(Number);
 
     while (hour < endHour || (hour === endHour && minute <= endMinute)) {
-      slots.push(
-        `${hour.toString().padStart(2, "0")}:${minute
-          .toString()
-          .padStart(2, "0")}`
-      );
+      slots.push(`${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`);
       minute += 30;
       if (minute >= 60) {
         minute = 0;
@@ -41,7 +39,7 @@ function ReservationForm({ clinicId, openTime, closeTime }) {
     }
   }, [openTime, closeTime]);
 
-  // 날짜 선택 시 서버에서 예약 가능한 시간 가져오기
+  // 날짜 선택 시 예약 가능한 시간 불러오기
   useEffect(() => {
     if (!selectedDate || !clinicId) return;
 
@@ -50,10 +48,28 @@ function ReservationForm({ clinicId, openTime, closeTime }) {
         setAvailableTimes(times);
       })
       .catch((err) => {
-        console.error("예약 가능 시간 조회 에러:", err);
         setAvailableTimes([]);
       });
   }, [selectedDate, clinicId]);
+
+  // 예약 요청
+  const handleReservation = () => {
+    if (!selectedDate || !selectedTime) {
+      alert("날짜와 시간을 선택해주세요.");
+      return;
+    }
+
+    createReservation(clinicId, selectedDate.replace(/-/g, "."), selectedTime, message)
+      .then((res) => {
+        alert("예약이 완료되었습니다!");
+        setAvailableTimes((prev) => prev.filter((time) => time !== selectedTime));
+        setSelectedTime("");
+        setMessage("");
+      })
+      .catch((err) => {
+        alert("예약에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
 
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-sm border">
@@ -62,22 +78,18 @@ function ReservationForm({ clinicId, openTime, closeTime }) {
       <div className="space-y-6">
         {/* 날짜 선택 */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            예약 날짜
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">예약 날짜</label>
           <input
             type="date"
             className="w-full p-3 mb-2 border border-gray-300 rounded-lg"
             value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)} // 선택한 날짜 업데이트
+            onChange={(e) => setSelectedDate(e.target.value)}
           />
         </div>
 
         {/* 시간 선택 */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            예약 시간
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">예약 시간</label>
           <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto p-2 border border-gray-200 rounded-lg">
             {slots.map((time) => {
               const isAvailable = availableTimes.includes(time);
@@ -85,8 +97,11 @@ function ReservationForm({ clinicId, openTime, closeTime }) {
                 <button
                   key={time}
                   disabled={!isAvailable}
+                  onClick={() => setSelectedTime(time)}
                   className={`p-2 text-sm rounded-md border ${
-                    isAvailable
+                    selectedTime === time
+                      ? "bg-blue-500 text-white border-blue-500"
+                      : isAvailable
                       ? "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                       : "bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed"
                   }`}
@@ -97,10 +112,30 @@ function ReservationForm({ clinicId, openTime, closeTime }) {
             })}
           </div>
         </div>
+
+        {/* 메시지 입력 */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">메시지</label>
+          <textarea
+            className="w-full p-3 border border-gray-300 rounded-lg"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="추가 요청 사항을 입력하세요."
+          />
+        </div>
+
+        {/* 예약 버튼 */}
+        <button
+          onClick={handleReservation}
+          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
+        >
+          예약하기
+        </button>
       </div>
     </div>
   );
 }
+
 
 function ReviewForm({ author, content, imageURLs, createdAt, rating }) {
   return (

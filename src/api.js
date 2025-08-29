@@ -102,6 +102,20 @@ export const updateUserInfo = (formData) => {
 }
 
 // Reservation 관련 API
+
+export const createReservation = (clinicId, date, time, message) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.post(`/clinics/${clinicId}/reservations`, {
+        date,
+        time,
+        message
+    }, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
 export const fetchReservations = () => {
     const token = localStorage.getItem("accessToken").trim();
     return api.get('/reservations/me', {
@@ -119,9 +133,8 @@ export const fetchAvailableTimes = (clinicId, date) => {
       params: { date },
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
-    .then((res) => res.data.times || []); // 서버에서 times 배열만 반환
+    .then((res) => res.data.times || []);
 };
-
 
 
 // 병원 관련 API
