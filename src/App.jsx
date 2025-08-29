@@ -10,6 +10,8 @@ import ClinicPage from './components/ClinicPage'
 import MyPage from './components/MyPage'
 import Board from './components/Board'
 import NavigationBar from './components/common/NavigationBar'
+import ProtectedRoute from './ProtectedRoute'
+import PublicRoute from './PublicRoute'
 import PostDetail from './components/PostDetail'
 import PostCreate from './components/PostCreate'
 import PostEdit from './components/PostEdit'
@@ -23,20 +25,18 @@ function AppContent() {
     <>
       {!navigationBarHiddenUrl.includes(location.pathname) && <NavigationBar />}
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/sign-up/doctor" element={<SignUpPage />} />
-        <Route path="/sign-up/doctor" element={<SignUpPage />} />
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/search" element={<ClinicSearchPage />} />
-        <Route path="/review" element={<ReviewPage />} />
-        <Route path='/mypage' element={<MyPage />} />
-        <Route path='/board' element={<Board />} />
-        <Route path="/posts/new" element={<PostCreate />} />
-        <Route path="/posts/:id" element={<PostDetail />} />
-        <Route path="/posts/:id/edit" element={<PostEdit />} />
-        <Route path="/clinic" element={<ClinicPage />} />
-        <Route path="/clinic/:id" element={<ClinicPage />} />
+        <Route path="/" element={ <ProtectedRoute> <MainPage /> </ProtectedRoute>} />
+        <Route path="/sign-up" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+        <Route path="/sign-up/doctor" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+        <Route path="/sign-in" element={<PublicRoute><SignInPage /></PublicRoute>} />
+        <Route path="/search" element={<ProtectedRoute><ClinicSearchPage /></ProtectedRoute>} />
+        <Route path="/review" element={<ProtectedRoute><ReviewPage /></ProtectedRoute>} />
+        <Route path='/mypage' element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+        <Route path='/board' element={<ProtectedRoute><Board /></ProtectedRoute>} />
+        <Route path="/clinic/:id" element={<ProtectedRoute><ClinicPage /></ProtectedRoute>} />
+        <Route path="/posts/new" element={<ProtectedRoute><PostCreate /></ProtectedRoute>} />
+        <Route path="/posts/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
+        <Route path="/posts/:id/edit" element={<ProtectedRoute><PostEdit /></ProtectedRoute>} />
       </Routes>
     </>
   );
