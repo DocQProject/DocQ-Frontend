@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   fetchUserInfo,
   updateUserInfo,
@@ -437,33 +437,40 @@ function DeleteAccountSection({}) {
 function MyPage() {
   const [activeSection, setActiveSection] = useState("내 정보");
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [reservations, setReservations] = useState([]);
   const [clinic, setClinic] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  useEffect(() => {
+    const section = searchParams.get('section');
+    if (section) {
+      switch(section) {
+        case 'profile':
+          setActiveSection("내 정보");
+          break;
+        case 'reservations':
+          setActiveSection("내 예약");
+          break;
+        case 'clinic':
+          setActiveSection("내 병원");
+          break;
+        case 'delete':
+          setActiveSection("회원탈퇴");
+          break;
+        default:
+          setActiveSection("내 정보");
+      }
+    }
+  }, [searchParams]);
+
+  // 데이터 fetch
   useEffect(() => {
     if (activeSection === "내 정보") {
-      setLoading(true);
-      fetchUserInfo()
-        .then((res) => setUser(res.data)) // axios는 res.data에 데이터가 들어 있음
-        .catch((err) => console.error(err))
-        .finally(() => setLoading(false));
-    }
-  }, [activeSection]);
-
-  useEffect(() => {
-    if (activeSection === "내 예약") {
-      fetchReservations()
-        .then((res) => setReservations(res.data.content))
-        .catch((err) => console.error(err));
-    }
-  }, [activeSection]);
-
-  useEffect(() => {
-    if (activeSection === "내 병원") {
-      fetchMyClinicInfo()
-        .then((res) => setClinic(res.data))
-        .catch((err) => console.error(err));
+      fetchUserInfo().then((res) => setUser(res.data)).catch(console.error);
+    } else if (activeSection === "내 예약") {
+      fetchReservations().then((res) => setReservations(res.data.content)).catch(console.error);
+    } else if (activeSection === "내 병원") {
+      fetchMyClinicInfo().then((res) => setClinic(res.data)).catch(console.error);
     }
   }, [activeSection]);
 
@@ -482,13 +489,21 @@ function MyPage() {
     }
   };
 
+    const handleSectionChange = (sectionKey, sectionName) => {
+    setActiveSection(sectionName);
+    // URL 파라미터 업데이트
+    const params = new URLSearchParams(searchParams);
+    params.set('section', sectionKey);
+    setSearchParams(params);
+  };
+
   const sidebarButtons = [
-    { label: "내 정보", key: "내 정보" },
+    { label: "내 정보", key: "내 정보", urlKey: "profile" }, 
     ...(user?.role === "ROLE_DOCTOR"
-      ? [{ label: "내 병원", key: "내 병원" }]
+      ? [{ label: "내 병원", key: "내 병원", urlKey: "clinic" }] 
       : []),
-    { label: "내 예약", key: "내 예약" },
-    { label: "회원탈퇴", key: "회원탈퇴", deleteAcount: true },
+    { label: "내 예약", key: "내 예약", urlKey: "reservations" }, 
+    { label: "회원탈퇴", key: "회원탈퇴", urlKey: "delete", deleteAcount: true }, 
   ];
 
   return (
@@ -509,7 +524,7 @@ function MyPage() {
               key={button.key}
               label={button.label}
               deleteAcount={button.deleteAcount}
-              onClick={() => setActiveSection(button.key)}
+              onClick={() => handleSectionChange(button.urlKey, button.key)}
             />
           ))}
         </aside>
