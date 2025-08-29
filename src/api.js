@@ -111,6 +111,19 @@ export const fetchReservations = () => {
     });
 }
 
+export const fetchAvailableTimes = (clinicId, date) => {
+  const token = localStorage.getItem("accessToken")?.trim();
+
+  return api
+    .get(`/clinics/${clinicId}/reservations`, {
+      params: { date },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+    .then((res) => res.data.times || []); // 서버에서 times 배열만 반환
+};
+
+
+
 // 병원 관련 API
 export const fetchMyClinicInfo = () => {
     const token = localStorage.getItem("accessToken").trim();
@@ -243,7 +256,7 @@ export function fetchCreateReview(clickedStarNum, reviewContent, clinicId) {
     )
 }
 
-export function fetchCreateImage(file, reviewId) {
+export function fetchCreateReviewImage(file, reviewId) {
     const token = localStorage.getItem("accessToken").trim();
 
     const formData = new FormData();
@@ -251,6 +264,24 @@ export function fetchCreateImage(file, reviewId) {
 
     return api.post(
         `/images/${reviewId}?referenceType=REVIEW`,
+        formData,
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        }
+    )
+}
+
+export function fetchCreatePostImage(file, postId) {
+    const token = localStorage.getItem("accessToken").trim();
+
+    const formData = new FormData();
+    formData.append("file", file);  // file 넣기
+
+    return api.post(
+        `/images/${postId}?referenceType=POST`,
         formData,
         {
             headers: {

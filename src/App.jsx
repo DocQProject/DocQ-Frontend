@@ -12,6 +12,7 @@ import Board from './components/Board'
 import NavigationBar from './components/common/NavigationBar'
 import PostDetail from './components/PostDetail'
 import PostCreate from './components/PostCreate'
+import PostEdit from './components/PostEdit'
 
 
 function AppContent() {
@@ -31,8 +32,9 @@ function AppContent() {
         <Route path="/review" element={<ReviewPage />} />
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/board' element={<Board />} />
+        <Route path="/posts/new" element={<PostCreate />} />
         <Route path="/posts/:id" element={<PostDetail />} />
-        <Route path='/posts/new' element={<PostCreate />} />
+        <Route path="/posts/:id/edit" element={<PostEdit />} />
         <Route path="/clinic" element={<ClinicPage />} />
         <Route path="/clinic/:id" element={<ClinicPage />} />
       </Routes>

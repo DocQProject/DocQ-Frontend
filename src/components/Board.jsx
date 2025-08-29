@@ -4,7 +4,7 @@ import { fetchAllPosts } from "../api";
 
 const PostItem = ({ title, author, createdAt, isLast, onClick}) => (
   <div
-    className={`flex text-sm sm:text-base text-gray-800 text-center py-3 px-2 ${
+    className={`flex text-sm sm:text-base text-gray-800 text-center py-3 px-2 cursor-pointer ${
       isLast ? "" : "border-b"
     }`}
     onClick={onClick}
