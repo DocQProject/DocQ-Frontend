@@ -11,6 +11,7 @@ import MyPage from './components/MyPage'
 import Board from './components/Board'
 import NavigationBar from './components/common/NavigationBar'
 import ProtectedRoute from './ProtectedRoute'
+import PublicRoute from './PublicRoute'
 
 
 function AppContent() {
@@ -22,10 +23,9 @@ function AppContent() {
       {!navigationBarHiddenUrl.includes(location.pathname) && <NavigationBar />}
       <Routes>
         <Route path="/" element={ <ProtectedRoute> <MainPage /> </ProtectedRoute>} />
-        <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/sign-up/doctor" element={<SignUpPage />} />
-        <Route path="/sign-up/doctor" element={<SignUpPage />} />
-        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+        <Route path="/sign-up/doctor" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+        <Route path="/sign-in" element={<PublicRoute><SignInPage /></PublicRoute>} />
         <Route path="/search" element={<ProtectedRoute><ClinicSearchPage /></ProtectedRoute>} />
         <Route path="/review" element={<ProtectedRoute><ReviewPage /></ProtectedRoute>} />
         <Route path='/mypage' element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
