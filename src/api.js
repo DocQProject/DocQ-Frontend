@@ -150,6 +150,53 @@ export const deleteAccount = (password) => {
     });
 }
 
+// 게시글 관련 API
+
+export const createPost = (postData) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.post('/posts', postData, {
+        headers: { 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+export const fetchAllPosts = (page = 0, size = 10) => {
+  const token = localStorage.getItem("accessToken")?.trim();
+  return api.get(`/posts?page=${page}&size=${size}`, {
+    headers: { 
+      Authorization: `Bearer ${token}`
+    }
+  });
+};
+
+export const fetchPostById = (postId) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.get(`/posts/${postId}`, {
+        headers: { 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+export const editPostById = (postId, postData) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.put(`/posts/${postId}`, postData, {
+        headers: { 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+export const deletePostById = (postId) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.delete(`/posts/${postId}`, {
+        headers: { 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
 export function fetchClinicInfo(clinicId) {
     const token = localStorage.getItem("accessToken").trim();
 
