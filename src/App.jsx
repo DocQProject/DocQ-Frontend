@@ -10,6 +10,7 @@ import ClinicPage from './components/ClinicPage'
 import MyPage from './components/MyPage'
 import Board from './components/Board'
 import NavigationBar from './components/common/NavigationBar'
+import ProtectedRoute from './ProtectedRoute'
 
 
 function AppContent() {
@@ -20,16 +21,16 @@ function AppContent() {
     <>
       {!navigationBarHiddenUrl.includes(location.pathname) && <NavigationBar />}
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={ <ProtectedRoute> <MainPage /> </ProtectedRoute>} />
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/sign-up/doctor" element={<SignUpPage />} />
         <Route path="/sign-up/doctor" element={<SignUpPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/search" element={<ClinicSearchPage />} />
-        <Route path="/review" element={<ReviewPage />} />
-        <Route path='/mypage' element={<MyPage />} />
-        <Route path='/board' element={<Board />} />
-        <Route path="/clinic/:id" element={<ClinicPage />} />
+        <Route path="/search" element={<ProtectedRoute><ClinicSearchPage /></ProtectedRoute>} />
+        <Route path="/review" element={<ProtectedRoute><ReviewPage /></ProtectedRoute>} />
+        <Route path='/mypage' element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+        <Route path='/board' element={<ProtectedRoute><Board /></ProtectedRoute>} />
+        <Route path="/clinic/:id" element={<ProtectedRoute><ClinicPage /></ProtectedRoute>} />
       </Routes>
     </>
   );
