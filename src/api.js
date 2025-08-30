@@ -102,6 +102,20 @@ export const updateUserInfo = (formData) => {
 }
 
 // Reservation 관련 API
+
+export const createReservation = (clinicId, date, time, message) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.post(`/clinics/${clinicId}/reservations`, {
+        date,
+        time,
+        message
+    }, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
 export const fetchReservations = () => {
     const token = localStorage.getItem("accessToken").trim();
     return api.get('/reservations/me', {
@@ -110,6 +124,18 @@ export const fetchReservations = () => {
         }
     });
 }
+
+export const fetchAvailableTimes = (clinicId, date) => {
+  const token = localStorage.getItem("accessToken")?.trim();
+
+  return api
+    .get(`/clinics/${clinicId}/reservations`, {
+      params: { date },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+    .then((res) => res.data.times || []);
+};
+
 
 // 병원 관련 API
 export const fetchMyClinicInfo = () => {
@@ -147,6 +173,53 @@ export const deleteAccount = (password) => {
             "Authorization": `Bearer ${token}`
         },
         data: password
+    });
+}
+
+// 게시글 관련 API
+
+export const createPost = (postData) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.post('/posts', postData, {
+        headers: { 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+export const fetchAllPosts = (page = 0, size = 10) => {
+  const token = localStorage.getItem("accessToken")?.trim();
+  return api.get(`/posts?page=${page}&size=${size}`, {
+    headers: { 
+      Authorization: `Bearer ${token}`
+    }
+  });
+};
+
+export const fetchPostById = (postId) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.get(`/posts/${postId}`, {
+        headers: { 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+export const editPostById = (postId, postData) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.put(`/posts/${postId}`, postData, {
+        headers: { 
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
+export const deletePostById = (postId) => {
+    const token = localStorage.getItem("accessToken").trim();
+    return api.delete(`/posts/${postId}`, {
+        headers: { 
+            "Authorization": `Bearer ${token}`
+        }
     });
 }
 
@@ -196,7 +269,7 @@ export function fetchCreateReview(clickedStarNum, reviewContent, clinicId) {
     )
 }
 
-export function fetchCreateImage(file, reviewId) {
+export function fetchCreateReviewImage(file, reviewId) {
     const token = localStorage.getItem("accessToken").trim();
 
     const formData = new FormData();
@@ -204,6 +277,24 @@ export function fetchCreateImage(file, reviewId) {
 
     return api.post(
         `/images/${reviewId}?referenceType=REVIEW`,
+        formData,
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        }
+    )
+}
+
+export function fetchCreatePostImage(file, postId) {
+    const token = localStorage.getItem("accessToken").trim();
+
+    const formData = new FormData();
+    formData.append("file", file);  // file 넣기
+
+    return api.post(
+        `/images/${postId}?referenceType=POST`,
         formData,
         {
             headers: {

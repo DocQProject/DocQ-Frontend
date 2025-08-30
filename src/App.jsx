@@ -12,6 +12,9 @@ import Board from './components/Board'
 import NavigationBar from './components/common/NavigationBar'
 import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoute'
+import PostDetail from './components/PostDetail'
+import PostCreate from './components/PostCreate'
+import PostEdit from './components/PostEdit'
 
 
 function AppContent() {
@@ -31,6 +34,9 @@ function AppContent() {
         <Route path='/mypage' element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
         <Route path='/board' element={<ProtectedRoute><Board /></ProtectedRoute>} />
         <Route path="/clinic/:id" element={<ProtectedRoute><ClinicPage /></ProtectedRoute>} />
+        <Route path="/posts/new" element={<ProtectedRoute><PostCreate /></ProtectedRoute>} />
+        <Route path="/posts/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
+        <Route path="/posts/:id/edit" element={<ProtectedRoute><PostEdit /></ProtectedRoute>} />
       </Routes>
     </>
   );

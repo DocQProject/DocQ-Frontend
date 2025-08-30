@@ -1,12 +1,76 @@
-import { useState, useEffect } from "react"
-import SideBar from "./SideBar"
-import { useNavigate, useParams } from "react-router-dom"
-import { fetchClinicInfo, fetchReview } from "../api"
-import { StarRatingDisplay } from "./common/StarPoint"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { useInView } from "react-intersection-observer"
+import { useState, useEffect } from "react";
+import SideBar from "./SideBar";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchClinicInfo, fetchReview, fetchAvailableTimes, createReservation } from "../api";
+import { StarRatingDisplay } from "./common/StarPoint";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
 
-function ReservationForm() {
+
+function ReservationForm({ clinicId, openTime, closeTime }) {
+  const [slots, setSlots] = useState([]);
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [message, setMessage] = useState("");
+
+  // 슬롯 생성
+  function generateTimeSlots(start, end) {
+    const slots = [];
+    let [hour, minute] = start.split(":").map(Number);
+    const [endHour, endMinute] = end.split(":").map(Number);
+
+    while (hour < endHour || (hour === endHour && minute <= endMinute)) {
+      slots.push(`${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`);
+      minute += 30;
+      if (minute >= 60) {
+        minute = 0;
+        hour += 1;
+      }
+    }
+    return slots;
+  }
+
+  // 진료 시간에 맞는 슬롯 생성
+  useEffect(() => {
+    if (openTime && closeTime) {
+      const newSlots = generateTimeSlots(openTime, closeTime);
+      setSlots(newSlots);
+    }
+  }, [openTime, closeTime]);
+
+  // 날짜 선택 시 예약 가능한 시간 불러오기
+  useEffect(() => {
+    if (!selectedDate || !clinicId) return;
+
+    fetchAvailableTimes(clinicId, selectedDate)
+      .then((times) => {
+        setAvailableTimes(times);
+      })
+      .catch((err) => {
+        setAvailableTimes([]);
+      });
+  }, [selectedDate, clinicId]);
+
+  // 예약 요청
+  const handleReservation = () => {
+    if (!selectedDate || !selectedTime) {
+      alert("날짜와 시간을 선택해주세요.");
+      return;
+    }
+
+    createReservation(clinicId, selectedDate.replace(/-/g, "."), selectedTime, message)
+      .then((res) => {
+        alert("예약이 완료되었습니다!");
+        setAvailableTimes((prev) => prev.filter((time) => time !== selectedTime));
+        setSelectedTime("");
+        setMessage("");
+      })
+      .catch((err) => {
+        alert("예약에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
+
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-sm border">
       <h2 className="text-2xl font-semibold mb-6 text-center">예약하기</h2>
@@ -17,11 +81,9 @@ function ReservationForm() {
           <label className="block text-sm font-medium text-gray-700 mb-2">예약 날짜</label>
           <input
             type="date"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <input
-            type="date"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 mb-2 border border-gray-300 rounded-lg"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
           />
         </div>
 
@@ -29,81 +91,51 @@ function ReservationForm() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">예약 시간</label>
           <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto p-2 border border-gray-200 rounded-lg">
-            {/* 10:00-12:00 시간대 */}
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              10:00
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              10:30
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              11:00
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              11:30
-            </button>
-
-            {/* 휴게시간 표시 */}
-            <div className="col-span-3 text-center text-sm text-gray-400 py-2 border-t border-b border-gray-200 my-2">
-              휴게시간 (12:00 - 14:00)
-            </div>
-
-            {/* 14:00-20:00 시간대 */}
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              14:00
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              14:30
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              15:00
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              15:30
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              16:00
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              16:30
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              17:00
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              17:30
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              18:00
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              18:30
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-50">
-              19:00
-            </button>
-            <button className="p-2 text-sm rounded-md border bg-blue-600 text-white border-blue-600">19:30</button>
+            {slots.map((time) => {
+              const isAvailable = availableTimes.includes(time);
+              return (
+                <button
+                  key={time}
+                  disabled={!isAvailable}
+                  onClick={() => setSelectedTime(time)}
+                  className={`p-2 text-sm rounded-md border ${
+                    selectedTime === time
+                      ? "bg-blue-500 text-white border-blue-500"
+                      : isAvailable
+                      ? "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                      : "bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed"
+                  }`}
+                >
+                  {time}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* 메시지 입력 */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">추가 메시지 (선택사항)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">메시지</label>
           <textarea
-            placeholder="요청사항"
-            rows={4}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full p-3 border border-gray-300 rounded-lg"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="추가 요청 사항을 입력하세요."
           />
         </div>
 
-        {/* 예약하기 버튼 */}
-        <button className="w-full py-3 px-4 rounded-lg font-semibold bg-black text-white hover:bg-blue-700 transition-colors">
+        {/* 예약 버튼 */}
+        <button
+          onClick={handleReservation}
+          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
+        >
           예약하기
         </button>
       </div>
     </div>
-  )
+  );
 }
+
 
 function ReviewForm({ author, content, imageURLs, createdAt, rating }) {
   return (
@@ -217,7 +249,11 @@ function ClinicPage() {
           </div>
         )
       case "예약":
-        return <ReservationForm />
+        return <ReservationForm
+            clinicId={clinicParam.id}
+            openTime={clinicData.openTime}
+            closeTime={clinicData.closeTime}
+          />
       default:
         return null
     }
@@ -243,4 +279,5 @@ function ClinicPage() {
   )
 }
 
-export default ClinicPage
+export default ClinicPage;
+

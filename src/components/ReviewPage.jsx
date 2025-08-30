@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { StarRatingInput } from "./common/StarPoint";
 import { useNavigate, useLocation } from "react-router-dom";
-import { fetchCreateImage, fetchCreateReview } from "../api";
+import { fetchCreateReviewImage, fetchCreateReview } from "../api";
 
 function ImageUpload({ imgPath, setImgPath }) {
     function addImage(e) {
@@ -75,7 +75,7 @@ function ReviewPage() {
                 const newReviewId = res.data.reviewId;
 
                 // 이미지 업로드 끝난 후 페이지 이동
-                return Promise.all(imgPath.map(file => fetchCreateImage(file, newReviewId)));
+                return Promise.all(imgPath.map(file => fetchCreateReviewImage(file, newReviewId)));
             })
             .then(() => {
                 navigate(`/clinic/${clinicId}`);
